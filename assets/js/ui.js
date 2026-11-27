@@ -131,7 +131,6 @@ function footer() {
     <div class="footer-top">
       <a class="side-brand" href="index.html"><img src="assets/img/isotipo-oscuro.svg" alt="" class="on-dark"><img src="assets/img/isotipo.svg" alt="" class="on-light"><span>astroly</span></a>
       <div class="footer-col"><span class="label">Tienda</span><a href="index.html#catalogo">Catálogo</a><a href="cuenta.html">Mi cuenta</a><a href="carrito.html">Carrito</a></div>
-      <div class="footer-col"><span class="label">Redes</span>${CONFIG.socials.map(s => `<a href="${s.url}">${s.name}</a>`).join('')}</div>
       <div class="footer-col"><span class="label">Compra</span><span>Pago en línea</span><span>COP o USD</span><span>Envíos en Colombia</span></div>
     </div>
     <div class="footer-bottom"><span>© ${new Date().getFullYear()} astroly</span><span>Productos y precios de ejemplo</span></div>`;
@@ -189,7 +188,7 @@ function renderDrawer() {
 export function checkout() {
   if (!store.count()) { mascot?.react('empty'); return; }
   mascot?.react('checkout');
-  toast('Aquí se abre el pago seguro de Shopify.'); // En Shopify: location.href = '/checkout'
+  toast('Estás en la vista previa. El pago se habilita en la tienda Shopify.');
 }
 export function toast(text) {
   let t = $('.toast'); if (!t) { t = document.createElement('div'); t.className = 'toast'; t.setAttribute('role', 'status'); document.body.append(t); }
@@ -223,16 +222,19 @@ export function flyToCart(fromEl, html) {
 }
 
 // ── Tarjeta de producto (estilo tienda: imagen, nombre, precio y botón visible)
+export function productUrl(id, tone) {
+  return 'producto.html?' + new URLSearchParams({id, tono: tone});
+}
 export function card(p, i = 0, tone) {
   tone = typeof tone === 'string' && p.tones.includes(tone) ? tone : p.tones[0];
   return `<article class="card" data-id="${p.id}" data-tone="${tone}" style="--i:${i}">
-    <a class="card-stage" href="producto.html?id=${p.id}" draggable="true" aria-label="${esc(p.name)}">
+    <a class="card-stage" data-product-link href="${productUrl(p.id, tone)}" draggable="true" aria-label="${esc(p.name)}">
       <span class="card-art">${artSVG(p.art, tone)}</span>${p.badge ? `<span class="badge">${p.badge}</span>` : ''}
     </a>
     <button type="button" class="fav ${store.isFav(p.id) ? 'is-on' : ''}" aria-pressed="${store.isFav(p.id)}" aria-label="Guardar ${esc(p.name)} en favoritos">${ICON.heart}</button>
     <div class="card-body">
       <span class="card-col">${collectionName(p.col)}</span>
-      <h3><a href="producto.html?id=${p.id}">${esc(p.name)}</a></h3>
+      <h3><a data-product-link href="${productUrl(p.id, tone)}">${esc(p.name)}</a></h3>
       <div class="card-row">${store.priceTag(p.price)}<div class="tones" role="group" aria-label="Tonos">${p.tones.map((t, k) => `<button type="button" class="tone tone-${t}" data-tone="${t}" aria-label="${TONE_NAMES[t]}" aria-pressed="${t === tone}"></button>`).join('')}</div></div>
       <button type="button" class="add" aria-label="Agregar ${esc(p.name)} al carrito"><span class="add-a">${ICON.plus}Agregar</span><span class="add-b">${ICON.check}Agregado</span></button>
     </div>
@@ -244,7 +246,9 @@ export function bindCards(root) {
     const p = byId(c.dataset.id);
     const tb = e.target.closest('.tone');
     if (tb) {
-      c.dataset.tone = tb.dataset.tone; $$('.tone', c).forEach(b => b.setAttribute('aria-pressed', b === tb));
+      c.dataset.tone = tb.dataset.tone;
+      for (const link of $$('[data-product-link]', c)) link.href = productUrl(p.id, c.dataset.tone);
+       $$('.tone', c).forEach(b => b.setAttribute('aria-pressed', b === tb));
       const art = $('.card-art', c); art.innerHTML = artSVG(p.art, tb.dataset.tone); art.classList.remove('is-swap'); void art.offsetWidth; art.classList.add('is-swap');
       mascot?.react('tone'); return;
     }

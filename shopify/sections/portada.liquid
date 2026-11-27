@@ -1,0 +1,25 @@
+{% assign featured = section.settings.product | default: collections.all.products.first %}
+<section class="hero" aria-labelledby="intro-title">
+  <div class="hero-copy">
+    <span class="pill">Hogar y decoración</span>
+    <h1 id="intro-title">Objetos que cambian tu espacio</h1>
+    <a class="button" href="{{ routes.all_products_collection_url }}">Ver catálogo</a>
+  </div>
+  <div class="hero-side">
+    <div class="hero-slot" data-mascot-slot="hero"></div>
+    {% if featured != blank %}
+      {% assign variant = featured.selected_or_first_available_variant %}
+      <a class="hero-product" href="{{ variant.url }}">
+        <span class="featured-art">{% render 'imagen', photo: featured.featured_image, sizes: '140px', loading: 'eager' %}</span>
+        <span class="featured-info"><strong>{{ featured.title | escape }}</strong><span>{{ variant.price | money_with_currency }}</span><span>Ver producto →</span></span>
+      </a>
+    {% endif %}
+  </div>
+</section>
+<section class="catalog">
+  <h2>Novedades</h2>
+  <div class="grid">{% for item in collections.all.products limit: 8 %}{% render 'tarjeta', item: item %}{% endfor %}</div>
+</section>
+{% schema %}
+{"name":"Portada Astroly","settings":[{"type":"product","id":"product","label":"Producto protagonista"}]}
+{% endschema %}

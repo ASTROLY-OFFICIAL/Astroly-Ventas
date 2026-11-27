@@ -1,0 +1,17 @@
+<dialog class="shop-drawer" aria-labelledby="panel-title" data-cart-panel data-count="{{ cart.item_count }}">
+  <div class="drawer-head"><h2 id="panel-title">Carrito</h2><form method="dialog"><button class="link-btn" autofocus>Cerrar</button></form></div>
+  {% for line in cart.items %}
+    <div class="line"><a class="line-name" href="{{ line.url }}">{{ line.product.title | escape }}{% unless line.product.has_only_default_variant %} · {{ line.variant.title | escape }}{% endunless %}</a>
+      <span>× {{ line.quantity }}</span><strong>{{ line.final_line_price | money_with_currency }}</strong></div>
+  {% else %}<p>Tu carrito está vacío.</p>{% endfor %}
+  <div class="drawer-foot">
+    {% unless cart == empty %}
+      <p>Subtotal <strong>{{ cart.total_price | money_with_currency }}</strong></p>
+      <form action="{{ routes.cart_url }}" method="post"><button type="submit" name="checkout" class="button">Continuar al pago</button></form>
+    {% endunless %}
+    <a class="button ghost" href="{{ routes.cart_url }}">Ver carrito</a>
+  </div>
+</dialog>
+{% schema %}
+{"name":"Panel de carrito","settings":[]}
+{% endschema %}

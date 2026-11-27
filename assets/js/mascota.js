@@ -7,7 +7,7 @@
 //  · Al bajar, lanza su hilo y cuelga a la derecha de la pantalla. Mientras haces scroll se desliza
 //    por la telaraña (baja si bajas, sube si subes) y cuando paras se queda en esa altura.
 //  · Solo se baja del hilo al llegar a la portada o al pie de página (data-mascot-slot="footer").
-import {on} from './store.js';
+import {on} from './events.js';
 
 const W = 56, H = 48;                       // resolución en píxeles del sprite
 const LOGO = 'M22 8H98Q119 8 108 27L73 86Q60 108 47 86L12 27Q1 8 22 8Z M76 42A16 16 0 1 0 44 42A16 16 0 1 0 76 42Z';

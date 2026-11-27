@@ -1,0 +1,3 @@
+{% if photo != blank %}
+  {{ photo | image_url: width: 1200 | image_tag: widths: '180, 360, 540, 800, 1200', sizes: sizes, loading: loading, alt: photo.alt }}
+{% endif %}

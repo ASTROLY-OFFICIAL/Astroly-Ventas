@@ -1,0 +1,12 @@
+<section class="catalog"><h1>Buscar en el catálogo</h1>
+<form action="{{ routes.search_url }}" method="get">
+  <input type="hidden" name="type" value="product">
+  <label>Producto <input type="search" name="q" value="{{ search.terms | escape }}"></label>
+  <button class="button" type="submit">Buscar</button>
+</form>
+{% if search.performed %}
+  {% paginate search.results by 24 %}
+    <div class="grid">{% for item in search.results %}{% if item.object_type == 'product' %}{% render 'tarjeta', item: item %}{% endif %}{% else %}<p>No encontramos productos.</p>{% endfor %}</div>
+    {{ paginate | default_pagination }}
+  {% endpaginate %}
+{% endif %}</section>

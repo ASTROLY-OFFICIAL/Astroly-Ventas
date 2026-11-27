@@ -1,0 +1,13 @@
+.hero-product img,.card-stage img,.pdp-stage img,.line-art img,.pdp-thumbs img{display:block;width:100%;height:100%;object-fit:contain}
+.card-stage img,.pdp-stage img{position:absolute;inset:0}
+.pdp-thumbs a{display:block;width:60px;height:60px;background:#fff;border-radius:10px;overflow:hidden}
+.card-body select,.pdp-info input,.line-info input,.catalog select,.catalog input[type="search"]{max-width:100%;font:inherit;padding:.45rem;border-radius:8px;border:1px solid var(--line);background:var(--c-bg);color:var(--c-ink)}
+.card-body label,.line-info label,.buy-row label{font-size:13px}.buy-row input,.line-info input{width:4em}
+.chip[aria-current]{background:var(--c-ink);color:var(--c-bg)}
+.sidebar nav,.footer-top,.catalog form,.pdp-info,.cart-lines{gap:12px}
+.catalog form{display:flex;align-items:center;flex-wrap:wrap;margin:12px 0}
+.summary,.pdp-info .acc{display:grid;align-content:start;gap:14px}
+@media(max-width:899px){.sidebar>[data-theme-toggle],.sidebar>.side-brand{display:none}.side-nav{width:100%;justify-content:space-evenly}.side-item{font-size:12px}}
+.shop-drawer{margin:0 0 0 auto;height:100dvh;max-height:100dvh;width:min(420px,100%);max-width:100%;border:0;padding:20px;color:var(--ink);background:var(--c-bg)}
+.shop-drawer::backdrop{background:#0007}.shop-drawer .line{grid-template-columns:minmax(0,1fr) auto auto}
+.shop-drawer form .button{width:100%}

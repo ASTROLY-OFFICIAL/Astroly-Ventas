@@ -1,0 +1,29 @@
+<h1>Tu carrito</h1>
+{% if cart == empty %}
+  <p>Tu carrito está vacío.</p>
+  <a class="button" href="{{ routes.all_products_collection_url }}">Ir al catálogo</a>
+{% else %}
+  <form action="{{ routes.cart_url }}" method="post" class="cart-page">
+    <div class="cart-lines">
+      {% for line in cart.items %}
+        <div class="line">
+          <a class="line-art" href="{{ line.url }}">{% render 'imagen', photo: line.image, sizes: '90px', loading: 'lazy' %}<span class="sr">{{ line.product.title | escape }}</span></a>
+          <div class="line-info"><a class="line-name" href="{{ line.url }}">{{ line.product.title | escape }}</a>
+            {% unless line.product.has_only_default_variant %}<span>{{ line.variant.title | escape }}</span>{% endunless %}
+            <label>Cantidad <input name="updates[]" type="number" min="0" value="{{ line.quantity }}" required></label>
+          </div>
+          <div class="line-end"><strong>{{ line.final_line_price | money_with_currency }}</strong><a href="{{ line.url_to_remove }}">Quitar</a></div>
+        </div>
+      {% endfor %}
+      <button class="button ghost" type="submit" name="update">Actualizar cantidades</button>
+    </div>
+    <aside class="summary band">
+      <h2>Resumen</h2><div class="row"><span>Subtotal</span><strong>{{ cart.total_price | money_with_currency }}</strong></div>
+      <p>El envío se calcula al pagar.</p>
+      <button class="button" type="submit" name="checkout">Continuar al pago</button>
+    </aside>
+  </form>
+{% endif %}
+{% schema %}
+{"name":"Carrito","settings":[]}
+{% endschema %}

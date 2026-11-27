@@ -12,38 +12,13 @@
 <main class="main page-inner">
   <div class="account-head">
     <h1>Tu cuenta</h1>
-    <p class="hint" data-greeting>Completa tus datos una vez y los usamos para tus pedidos.</p>
+    <p class="hint" data-greeting>Aquí puedes ver los favoritos guardados en este dispositivo.</p>
   </div>
   <div class="account">
-    <form class="account-form" novalidate>
-      <fieldset class="glass">
-        <legend>Datos personales</legend>
-        <div class="fields">
-          <label class="field"><span>Nombre</span><input name="nombre" autocomplete="given-name" required></label>
-          <label class="field"><span>Apellidos</span><input name="apellidos" autocomplete="family-name" required></label>
-          <label class="field"><span>Tipo de documento</span><select name="tipoDoc"><option>Cédula de ciudadanía</option><option>Cédula de extranjería</option><option>Pasaporte</option><option>NIT</option></select></label>
-          <label class="field"><span>Número de documento</span><input name="documento" inputmode="numeric" required></label>
-          <label class="field"><span>Correo</span><input name="correo" type="email" autocomplete="email" required></label>
-          <label class="field"><span>Celular</span><input name="celular" type="tel" autocomplete="tel" inputmode="tel" placeholder="300 000 0000" required></label>
-        </div>
-      </fieldset>
-      <fieldset class="glass">
-        <legend>Dirección de envío</legend>
-        <div class="fields">
-          <label class="field"><span>Departamento</span><select name="departamento" required></select></label>
-          <label class="field"><span>Ciudad o municipio</span><input name="ciudad" autocomplete="address-level2" required></label>
-          <label class="field wide"><span>Dirección</span><input name="direccion" autocomplete="street-address" placeholder="Calle, carrera, número" required></label>
-          <label class="field"><span>Barrio</span><input name="barrio"></label>
-          <label class="field"><span>Apto, torre o indicaciones</span><input name="detalle"></label>
-        </div>
-      </fieldset>
-      <label class="check"><input type="checkbox" name="novedades"><span>Quiero recibir novedades y lanzamientos</span></label>
-      <div class="form-actions"><button type="submit" class="button">Guardar datos</button><span class="hint" data-status></span></div>
-    </form>
     <aside class="account-side">
       <div class="orders band">
         <h2>Mis pedidos</h2>
-        <p class="hint">Aún no tienes pedidos. Cuando compres, aparecerán aquí con su estado.</p>
+        <p class="hint">Tus pedidos se consultan en la cuenta de la tienda Shopify.</p>
         <a class="button" href="index.html#catalogo">Ir al catálogo</a>
       </div>
       <div class="favs glass"><h2>Favoritos</h2><div class="fav-list"></div></div>

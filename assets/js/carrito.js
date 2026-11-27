@@ -1,6 +1,6 @@
 // Página del carrito: líneas con cantidad, resumen en banda invertida y pago.
 // Si está vacío, la mascota baja grande al centro de la página.
-import {shell, $, $$, card, bindCards, bindLines, lineRow, rise, store, checkout} from './ui.js';
+import {shell, $, $$, card, bindCards, bindLines, lineRow, store, checkout} from './ui.js';
 import {PRODUCTS} from './data.js';
 
 const mascot = shell();
@@ -25,5 +25,5 @@ render();
 if (wasEmpty) setTimeout(() => mascot.react('empty'), 700);
 
 const picks = PRODUCTS.filter(p => p.badge).concat(PRODUCTS).filter((p, i, a) => a.indexOf(p) === i).slice(0, 4);
-const grid = $('.related .grid'); grid.innerHTML = picks.map(card).join(''); bindCards(grid);
-rise();
+const grid = $('.related .grid'); grid.innerHTML = picks.map((x, i) => card(x, i)).join(''); bindCards(grid);
+

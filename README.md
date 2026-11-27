@@ -17,25 +17,33 @@ Abre http://127.0.0.1:4180. (Con doble clic sobre `index.html` no carga: los mó
 
 ## Páginas
 
-- `index.html`: portada con la mascota y las redes → enunciado → novedades (riel horizontal que avanza con el
-  scroll) → colecciones (banda invertida con vista previa) → catálogo con búsqueda, filtros y orden → redes → pie.
-- `producto.html?id=…`: vistas Frente / Detalle / De noche, giro con el cursor, tonos, cantidad, favoritos y relacionados.
-- `carrito.html`: líneas con cantidad, resumen, moneda y pago. Vacío, la mascota baja grande al centro.
-- En todas: dock del carrito abajo a la derecha (también se le pueden arrastrar productos), panel lateral del carrito,
-  moneda COP/USD y tema claro/oscuro, recordados entre visitas.
+- Barra lateral en todas las páginas (abajo en celular): **Inicio**, **Categoría** (buscador con resultados en vivo
+  y lista de categorías), **Tú** (cuenta) y **Carrito** (abre el panel; también se le pueden arrastrar productos).
+  Moneda COP/USD y tema claro/oscuro al pie de la barra (arriba en celular).
+- `index.html`: portada compacta (título a la izquierda, redes a la derecha con la mascota encima), fila de novedades
+  y catálogo con búsqueda, filtros por categoría, precio y tono, y orden.
+- `producto.html?id=…`: vistas Frente / Detalle / De noche, tonos, cantidad, favoritos y relacionados.
+- `cuenta.html`: el cliente diligencia sus datos (personales y dirección de envío en Colombia), ve sus favoritos y sus pedidos.
+- `carrito.html`: líneas con cantidad, resumen, moneda y pago.
+
+Del kit de diseño de Astroly se usan los colores, las tipografías y los efectos (vidrio, tarjetas blancas, movimiento);
+la composición es de tienda, con textos cortos para que la atención quede en los productos.
 
 ## La mascota
 
 Es el isotipo convertido en araña: el triángulo es el cuerpo y el hueco circular es el ojo. Código en `assets/js/mascota.js`.
 
-- Primera visita: el isotipo 3D gira, se disuelve y la araña se arma píxel a píxel, saluda según la hora.
-- Viaja de la portada al dock al bajar, y cuelga de su hilo cuando se hace scroll.
-- Añadir al carrito: salta y celebra con confeti. Subir cantidad: moneda. Quitar: se pone triste y llora.
-- Favorito: ojos de corazón. Moneda: se marea con monedas. Tema claro: lentes de sol; oscuro: se adormece.
-- Pasar el cursor por un producto: lo mira con curiosidad y a veces pregunta. Buscar: lee. Sin resultados: se confunde.
-- Pagar: baila con notas. Tocarla: saluda; muchos toques seguidos: se marea.
+- Primera visita: el isotipo 3D gira sobre la tarjeta de redes y se vuelve la araña, que saluda según la hora.
+- Al bajar, lanza su hilo y cuelga a la derecha. Mientras haces scroll se desliza por la telaraña (agarrada al hilo)
+  y cuando paras se queda a esa altura. Solo se baja del hilo en la portada o en el pie de página.
+- Catálogo: celebra al agregar, se pone triste al quitar, ojos de corazón con favoritos, cambia de tono con brillo,
+  mira con curiosidad el producto bajo el cursor, lee mientras buscas y se confunde sin resultados.
+- Producto: lupa en la vista Detalle, se adormece en la vista De noche, cuenta monedas al subir la cantidad.
+- Cuenta: "escribe" mientras llenas el formulario, te saluda por tu nombre, niega con la cabeza si falta un dato y
+  celebra al guardar.
+- Carrito y pago: baila al pagar; con el carrito vacío baja grande al centro.
+- Tema claro: lentes de sol; oscuro: se adormece. Moneda: se marea con monedas. Tocarla: saluda; muchos toques: se marea.
 - 14 s sin actividad: teje una telaraña. 30 s: se duerme con Z. Cualquier acción la despierta de un susto.
-- Volver a la pestaña después de un rato: "¡Volviste!".
 - Prueba en la consola del navegador: `astrolyMascot.idle(31)` (dormir) o `astrolyMascot.react('add')`.
 
 ## Lo que reemplaza tu socio
@@ -50,8 +58,9 @@ Es el isotipo convertido en araña: el triángulo es el cuerpo y el hueco circul
 
 La cuenta de Shopify ya existe; el siguiente paso es convertir esto en un tema (Online Store 2.0):
 
-- Cabecera, pie, dock y panel del carrito → `sections/header.liquid`, `footer.liquid`, `snippets/cart-drawer.liquid`.
-- Inicio → secciones editables desde el personalizador (portada, enunciado, novedades, colecciones, catálogo).
+- Barra lateral, panel de Categoría, pie y panel del carrito → `sections/sidebar.liquid`, `snippets/search.liquid`, `footer.liquid`, `snippets/cart-drawer.liquid`.
+- Inicio → secciones editables desde el personalizador (portada, novedades, catálogo); el catálogo usa los filtros de Shopify (Search & Discovery).
+- Cuenta → cuentas de cliente de Shopify (datos, direcciones y pedidos).
 - Tarjeta de producto → `snippets/product-card.liquid`; ficha → `sections/main-product.liquid` (los tonos serán variantes).
 - `assets/js/store.js` ya agrupa el carrito en `add / setQty / remove`: se cambian por la Ajax API (`/cart/add.js`, `/cart/change.js`).
 - Moneda: Shopify Markets con COP y USD; el selector cambia el mercado en vez de calcular con `usdRate`.
@@ -61,6 +70,6 @@ La cuenta de Shopify ya existe; el siguiente paso es convertir esto en un tema (
 ## Archivos
 
 - `assets/css/tienda.css`: todo el estilo (tokens del kit, temas, móvil compacto, movimiento reducido).
-- `assets/js/`: `ui.js` (piezas compartidas), `home.js`, `producto.js`, `carrito.js`, `store.js`, `data.js`,
+- `assets/js/`: `ui.js` (piezas compartidas), `home.js`, `producto.js`, `carrito.js`, `cuenta.js`, `store.js`, `data.js`,
   `art.js`, `mascota.js`, `hero3d.js`.
 - `assets/vendor/`: three.js (licencia MIT). `assets/fonts/`: Urbanist y Geist Mono. `assets/img/`: isotipos.

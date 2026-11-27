@@ -5,19 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Producto · astroly</title>
 <link rel="icon" href="assets/img/isotipo.svg" type="image/svg+xml">
-<script>document.documentElement.dataset.theme=localStorage.getItem('astroly-theme')||'light';document.documentElement.classList.add('js')</script>
+<script>document.documentElement.dataset.theme=localStorage.getItem('astroly-theme')||'light'</script>
 <link rel="stylesheet" href="assets/css/tienda.css">
 </head>
-<body class="page-product">
-<main class="page-inner">
+<body data-page="product">
+<main class="main page-inner">
   <nav class="crumbs" aria-label="Ruta"><a href="index.html">Inicio</a><span>/</span><a href="index.html#catalogo">Catálogo</a><span>/</span><span data-crumb></span></nav>
   <div class="pdp">
     <div class="pdp-gallery">
-      <div class="pdp-stage"><div class="pdp-art"></div><span class="giant-tag mono"></span><span class="hint-tag mono">Mueve el cursor para girar</span></div>
+      <div class="pdp-stage"><div class="pdp-art"></div><span class="giant-tag mono"></span></div>
       <div class="pdp-thumbs" role="group" aria-label="Vistas"></div>
     </div>
     <div class="pdp-info">
-      <div><span class="label" data-col></span><h1 data-rise></h1></div>
+      <div><span class="label" data-col></span><h1></h1></div>
       <span class="pdp-price"></span>
       <p class="pdp-short"></p>
       <div class="opt"><div class="opt-head"><span class="label">Tono</span><span class="label" data-tone-name></span></div><div class="opt-tones" role="group" aria-label="Tono"></div></div>
@@ -26,11 +26,7 @@
         <button type="button" class="button add-btn"><span class="add-fill"></span><span class="add-label">Añadir al carrito</span><span class="add-done">En tu carrito ✓</span></button>
         <button type="button" class="fav pdp-fav" aria-pressed="false" aria-label="Guardar en favoritos"></button>
       </div>
-      <div class="perks">
-        <div class="perk glass"><b>Pago en línea</b>Precio fijo, pagas al finalizar.</div>
-        <div class="perk glass"><b>COP o USD</b>Cambia la moneda arriba.</div>
-        <div class="perk glass"><b>Envíos</b>A toda Colombia.</div>
-      </div>
+      <ul class="perks"><li>Pago en línea</li><li>COP o USD</li><li>Envíos en Colombia</li></ul>
       <div class="acc">
         <details open><summary>Descripción <i>+</i></summary><p data-desc></p></details>
         <details><summary>Medidas y materiales <i>+</i></summary><p>Espacio para las medidas, el peso y los materiales reales del producto.</p></details>
@@ -40,8 +36,7 @@
     </div>
   </div>
   <section class="related" aria-labelledby="related-title">
-    <span class="label">Combina con</span>
-    <h2 id="related-title" class="sent" data-rise>Completa el espacio</h2>
+    <h2 id="related-title">Completa el espacio</h2>
     <div class="grid"></div>
   </section>
 </main>

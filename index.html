@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>astroly · Tienda en línea de hogar y decoración</title>
+<meta name="description" content="Tienda en línea de astroly: objetos de decoración para el hogar, con pago en línea y precios en pesos o dólares.">
+<link rel="icon" href="assets/img/isotipo.svg" type="image/svg+xml">
+<script>document.documentElement.dataset.theme=localStorage.getItem('astroly-theme')||'light';document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="assets/css/tienda.css">
+<script type="importmap">{"imports":{"three":"./assets/vendor/three.module.js"}}</script>
+</head>
+<body class="page-home">
+<a class="skip" href="#catalogo">Saltar al catálogo</a>
+<main>
+  <!-- 1. Portada: introducción, redes y la mascota -->
+  <section class="hero" id="inicio" aria-labelledby="hero-title">
+    <div class="hero-stage">
+      <p class="hero-giant" aria-hidden="true">astroly</p>
+      <div class="hero-slot" data-mascot-slot="hero"></div>
+      <div class="hero-copy">
+        <span class="pill hero-pill">Tienda en línea · Hogar y decoración</span>
+        <h1 id="hero-title" data-rise="manual"><span>Objetos que</span> <span>cambian</span> <span class="key">tu espacio</span></h1>
+        <div class="hero-side">
+          <p class="hero-description">Piezas de decoración elegidas una a una para la sala, el cuarto y la mesa. Hoy empezamos por el hogar; lo que venga después también tendrá su lugar aquí.</p>
+          <div class="hero-actions"><a class="button" href="#catalogo">Ver catálogo</a><a class="text-link" href="#destacados">Novedades</a></div>
+        </div>
+      </div>
+      <aside class="hero-social glass" aria-label="Redes sociales">
+        <span class="label">Síguenos · astroly ventas</span>
+        <ul id="social-list"></ul>
+      </aside>
+      <a class="scroll-cue" href="#enfoque"><span class="mono">Desliza</span><i></i></a>
+    </div>
+  </section>
+
+  <!-- Barra de capítulos con progreso de lectura -->
+  <nav class="chapter-bar" aria-label="Secciones">
+    <div class="chapter-inner">
+      <span class="chapter-title">astroly</span>
+      <div class="chapter-links">
+        <a href="#inicio" data-chapter="inicio">Inicio</a>
+        <a href="#destacados" data-chapter="destacados">Novedades</a>
+        <a href="#colecciones" data-chapter="colecciones">Colecciones</a>
+        <a href="#catalogo" data-chapter="catalogo">Catálogo</a>
+      </div>
+      <span class="chapter-now mono" aria-live="polite"></span>
+    </div>
+    <span class="chapter-progress" aria-hidden="true"></span>
+  </nav>
+
+  <!-- 2. Enunciado -->
+  <section class="statement" id="enfoque" aria-labelledby="statement-title">
+    <p class="giant" aria-hidden="true">Espacios</p>
+    <h2 id="statement-title" class="upper" data-rise>Diseño que se siente <span class="key">en casa. Sin catálogos sin alma.</span></h2>
+    <div class="statement-cards">
+      <article class="s-card glass" data-reveal><div class="s-art" data-art="sculpture" data-tone="s"></div><span class="label">01</span><h3>Elegido con criterio</h3><p>Cada pieza entra al catálogo por cómo se ve, cómo se siente y cuánto dura.</p></article>
+      <article class="s-card glass" data-reveal style="--d:1"><div class="s-art" data-art="tray" data-tone="m"></div><span class="label">02</span><h3>Pago en línea</h3><p>Compras con precio fijo y pagas desde la tienda, sin cotizaciones ni esperas.</p></article>
+      <article class="s-card glass" data-reveal style="--d:2"><div class="s-art" data-art="crate" data-tone="m"></div><span class="label">03</span><h3>En pesos o dólares</h3><p>Elige arriba la moneda en la que quieres ver los precios.</p></article>
+    </div>
+  </section>
+
+  <!-- 3. Novedades: riel horizontal que avanza con el scroll -->
+  <section class="showroom" id="destacados" aria-labelledby="showroom-title">
+    <div class="showroom-sticky">
+      <p class="giant" aria-hidden="true">Novedades</p>
+      <div class="showroom-head">
+        <span class="label">Recién llegados</span>
+        <h2 id="showroom-title" class="sent" data-rise>Piezas nuevas en el showroom</h2>
+        <span class="showroom-count mono"><b>01</b> / <span></span></span>
+      </div>
+      <div class="showroom-track" tabindex="0" aria-label="Novedades, desliza para ver más"></div>
+      <div class="showroom-bar" aria-hidden="true"><i></i></div>
+    </div>
+  </section>
+
+  <!-- 4. Colecciones: banda invertida con vista previa al pasar el cursor -->
+  <section class="collections band" id="colecciones" aria-labelledby="collections-title">
+    <div class="collections-copy">
+      <span class="label">Colecciones</span>
+      <h2 id="collections-title" class="sent" data-rise>Encuentra la pieza por el lugar de la casa</h2>
+      <ol class="collection-rows"></ol>
+    </div>
+    <div class="collection-stage" aria-hidden="true"><div class="collection-art"></div><p class="collection-caption mono"></p></div>
+  </section>
+
+  <!-- 5. Catálogo -->
+  <section class="catalog" id="catalogo" aria-labelledby="catalog-title">
+    <p class="giant" aria-hidden="true">Catálogo</p>
+    <div class="catalog-head">
+      <div><span class="label">Toda la tienda</span><h2 id="catalog-title" class="sent" data-rise>Catálogo</h2></div>
+      <div class="catalog-tools">
+        <label class="search"><span class="sr">Buscar</span><span class="search-icon" aria-hidden="true"></span><input type="search" placeholder="Buscar un producto" autocomplete="off"></label>
+        <label class="sort"><span class="sr">Ordenar</span><select><option value="rel">Destacados</option><option value="asc">Precio: menor a mayor</option><option value="desc">Precio: mayor a menor</option><option value="az">Nombre A–Z</option></select></label>
+      </div>
+    </div>
+    <div class="filters" role="group" aria-label="Filtrar por colección"></div>
+    <p class="results mono" aria-live="polite"></p>
+    <div class="grid"></div>
+    <div class="catalog-empty" hidden><p>No hay productos con esa búsqueda.</p><button type="button" class="text-link" data-reset>Ver todo</button></div>
+  </section>
+
+  <!-- 6. Cierre con redes -->
+  <section class="closing" aria-labelledby="closing-title">
+    <p class="giant" aria-hidden="true">Contacto</p>
+    <h2 id="closing-title" class="upper" data-rise>¿Buscas algo <span class="key">que no está aquí?</span></h2>
+    <ul class="closing-rows" id="closing-list"></ul>
+  </section>
+</main>
+<script type="module" src="assets/js/home.js"></script>
+</body>
+</html>

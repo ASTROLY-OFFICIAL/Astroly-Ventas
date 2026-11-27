@@ -17,7 +17,7 @@ function logoShape() {
   return s;
 }
 
-export function playIntro(holder, {onSettle, widthRatio = .39} = {}) {
+export function playIntro(holder, {onSettle, widthRatio = .46} = {}) {
   const canvas = document.createElement('canvas'); canvas.className = 'hero-3d'; holder.append(canvas);
   let renderer;
   try { renderer = new THREE.WebGLRenderer({canvas, antialias: true, alpha: true}); }

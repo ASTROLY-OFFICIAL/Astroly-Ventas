@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Carrito · astroly</title>
 <link rel="icon" href="assets/img/isotipo.svg" type="image/svg+xml">
-<script>document.documentElement.dataset.theme=localStorage.getItem('astroly-theme')||'light';document.documentElement.classList.add('js')</script>
+<script>document.documentElement.dataset.theme=localStorage.getItem('astroly-theme')||'light'</script>
 <link rel="stylesheet" href="assets/css/tienda.css">
 </head>
-<body class="page-cart">
-<main class="page-inner">
+<body data-page="cart">
+<main class="main page-inner">
   <div class="cart-page">
-    <h1 class="sent" data-rise>Tu carrito</h1>
+    <h1>Tu carrito</h1>
     <div class="cart-lines"></div>
     <aside class="summary band" aria-label="Resumen">
       <h2>Resumen</h2>
@@ -23,18 +23,16 @@
         <button type="button" data-currency-btn="COP">COP</button><button type="button" data-currency-btn="USD">USD</button>
       </div>
       <button type="button" class="button" data-checkout>Pagar de forma segura</button>
-      <p class="hint">El pago se hace en línea con la pasarela de Shopify. Los impuestos y el envío aparecen antes de confirmar.</p>
+      <p class="hint">Pago seguro con Shopify.</p>
     </aside>
     <div class="cart-empty" hidden>
       <div class="empty-slot" data-mascot-slot="hero"></div>
       <h2>Tu carrito está vacío</h2>
-      <p>La araña lo cuida mientras eliges algo.</p>
-      <a class="button" href="index.html#catalogo">Ir al catálogo</a>
+            <a class="button" href="index.html#catalogo">Ir al catálogo</a>
     </div>
   </div>
   <section class="related" aria-labelledby="related-title">
-    <span class="label">Para empezar</span>
-    <h2 id="related-title" class="sent" data-rise>Lo más visto</h2>
+    <h2 id="related-title">Lo más visto</h2>
     <div class="grid"></div>
   </section>
 </main>

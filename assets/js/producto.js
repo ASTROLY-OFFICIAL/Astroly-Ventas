@@ -1,5 +1,5 @@
 // Ficha de producto: vistas, tono, cantidad y un botón de añadir con respuesta visible.
-import {shell, $, $$, ICON, card, bindCards, rise, reduce, store, artSVG, TONE_NAMES, collectionName, flyToCart} from './ui.js';
+import {shell, $, $$, ICON, card, bindCards, reduce, store, artSVG, TONE_NAMES, collectionName, flyToCart} from './ui.js';
 import {PRODUCTS, byId} from './data.js';
 
 const mascot = shell();
@@ -29,7 +29,11 @@ function setView(i) {
   view = i; stage.dataset.view = i;
   $$('button', thumbs).forEach((b, k) => b.setAttribute('aria-pressed', k === i));
 }
-thumbs.addEventListener('click', e => { const b = e.target.closest('button'); if (b) setView($$('button', thumbs).indexOf(b)); });
+thumbs.addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  const i = $$('button', thumbs).indexOf(b); if (i === view) return;
+  setView(i); if (i === 1) mascot.react('zoom'); else if (i === 2) mascot.react('night'); else mascot.react('more');
+});
 
 // Girar la pieza con el cursor (o el dedo, en horizontal).
 if (!reduce.matches) {
@@ -50,13 +54,14 @@ tones.addEventListener('click', e => {
   tone = b.dataset.tone; $$('[data-tone]', tones).forEach(x => x.setAttribute('aria-pressed', x === b));
   $('[data-tone-name]').textContent = TONE_NAMES[tone];
   history.replaceState(null, '', `?id=${p.id}&tono=${tone}`);
-  drawArt(); setView(view);
+  drawArt(); setView(view); mascot.react('tone');
 });
 
 // Cantidad
 $('.buy-row .stepper').addEventListener('click', e => {
   const b = e.target.closest('[data-q]'); if (!b) return;
-  qty = Math.min(99, Math.max(1, qty + +b.dataset.q)); $('[data-qty]').textContent = qty;
+  const before = qty; qty = Math.min(99, Math.max(1, qty + +b.dataset.q)); $('[data-qty]').textContent = qty;
+  if (qty > before) mascot.react('more'); else if (qty < before) mascot.react('less');
 });
 
 // Añadir: el botón se llena, la pieza vuela al carrito y la mascota la atrapa.
@@ -79,7 +84,7 @@ syncFav();
 
 // Relacionados: misma colección primero.
 const related = PRODUCTS.filter(x => x.id !== p.id).sort((a, b) => (b.col === p.col) - (a.col === p.col)).slice(0, 4);
-const grid = $('.related .grid'); grid.innerHTML = related.map(card).join(''); bindCards(grid);
+const grid = $('.related .grid'); grid.innerHTML = related.map((x, i) => card(x, i)).join(''); bindCards(grid);
 
-drawArt(false); setView(0); rise();
-setTimeout(() => mascot.react('hover', {dir: -1}), 900);
+drawArt(false); setView(0);
+setTimeout(() => { const r = stage.getBoundingClientRect(); mascot.lookAt(r.left + r.width / 2, r.top + r.height / 2); mascot.react('hover', {dir: -1}); }, 900);

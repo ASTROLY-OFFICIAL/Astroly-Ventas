@@ -1,20 +1,43 @@
-// Inicio: portada compacta, novedades y catálogo con filtros.
-import {shell, $, $$, ICON, card, bindCards, reduce, store, COLLECTIONS, CONFIG, TONE_NAMES, esc, norm} from './ui.js';
+// Inicio: portada con producto destacado en 3D, novedades y catálogo con filtros.
+import {shell, $, $$, ICON, card, bindCards, reduce, store, COLLECTIONS, CONFIG, TONE_NAMES, esc, norm, flyToCart, artSVG} from './ui.js';
 import {PRODUCTS} from './data.js';
 
 const mascot = shell();
 
-// ── Redes
-$('#social-list').innerHTML = CONFIG.socials.map(s => `<li><a href="${s.url}" class="social-row"><span class="social-icon">${ICON[s.key]}</span><span class="social-name">${s.name}</span><span class="social-handle mono">${esc(s.handle)}</span></a></li>`).join('');
 $('.search-icon').innerHTML = ICON.search;
 
-// ── Intro: el isotipo 3D gira sobre la tarjeta de redes y se vuelve la mascota (primera visita).
-if (!reduce.matches && !sessionStorage.getItem('astroly-intro') && scrollY < 50) {
-  sessionStorage.setItem('astroly-intro', '1');
-  mascot.prepare();
-  import('./hero3d.js').then(({playIntro}) => playIntro($('.hero-slot'), {onSettle: () => mascot.assemble()}))
-    .catch(() => mascot.assemble());
-} else setTimeout(() => mascot.react('greet', {text: 'Hola de nuevo. ¿Qué buscamos hoy?'}), 600);
+// ── Portada: producto destacado en 3D (lámpara que levita y se desarma en piezas)
+const F = CONFIG.featured, fp = PRODUCTS.find(p => p.id === F.id);
+const feat = $('[data-feature]');
+$('[data-feature-name]', feat).textContent = fp.name;
+$('[data-feature-link]', feat).href = `producto.html?id=${fp.id}`;
+$('[data-feature-price]', feat).innerHTML = store.priceTag(fp.price);
+$('[data-stars]', feat).innerHTML = [1, 2, 3, 4, 5].map(i => `<i style="--fill:${Math.round(Math.min(1, Math.max(0, F.rating - i + 1)) * 100)}%"></i>`).join('');
+// Cifras: cuentan desde cero cuando la portada está a la vista (datos de ejemplo en CONFIG.featured).
+function countUp() {
+  const goals = {rating: F.rating, sold: F.sold, reviews: F.reviews}, t0 = performance.now(), dur = reduce.matches ? 0 : 1600;
+  const fmt = (k, v) => k === 'rating' ? v.toLocaleString('es-CO', {minimumFractionDigits: 1, maximumFractionDigits: 1}) : Math.round(v).toLocaleString('es-CO');
+  feat.classList.add('is-counting');
+  const step = now => {
+    const k = dur ? Math.min(1, (now - t0) / dur) : 1, e = 1 - Math.pow(1 - k, 4);
+    $$('[data-count]', feat).forEach(el => { const key = el.dataset.count; el.textContent = fmt(key, goals[key] * e); });
+    if (k < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+if (F.showStats) {
+  $('[data-bar="sold"]', feat).style.setProperty('--to', '86%'); $('[data-bar="reviews"]', feat).style.setProperty('--to', '64%');
+  new IntersectionObserver(([e], io) => { if (e.isIntersecting) { io.disconnect(); setTimeout(countUp, 350); } }, {threshold: .4}).observe($('.feature-stats', feat));
+} else $('.feature-stats', feat).remove();
+$('[data-feature-add]', feat).addEventListener('click', e => {
+  const b = e.currentTarget; b.disabled = true;
+  flyToCart($('.lamp-stage', feat), artSVG(fp.art, fp.tones[0])).then(() => { store.add(fp.id, fp.tones[0], 1); b.disabled = false; });
+});
+const fallback = () => { $('.lamp-stage', feat).insertAdjacentHTML('afterbegin', `<div class="lamp-fallback">${artSVG(fp.art, fp.tones[0])}</div>`); };
+import('./lamp3d.js')
+  .then(({mountLamp}) => mountLamp($('.lamp-stage', feat), {labels: F.parts, button: $('[data-explode]', feat),
+    onExplode: open => feat.classList.toggle('is-exploded', open)}) || fallback())
+  .catch(fallback);
 
 // ── Novedades
 const track = $('.row-track');

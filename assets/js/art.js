@@ -29,7 +29,7 @@ function lathe(profile, tone = 'm', {open = false, cx = 0, cy = 0} = {}) {
   return `<g class="${tone}">${side}${top}${hole}</g>`;
 }
 const shadow = (rx = 34, ry = 12, x = 0, y = 4) => `<ellipse class="shadow" cx="${x}" cy="${y}" rx="${rx}" ry="${ry}"/>`;
-const defs = () => `<defs>${['m', 's', 'c', 'p'].map(t => `<linearGradient id="g-${t}" x1="0" x2="1" y1="0" y2="0"><stop offset="0" style="stop-color:var(--${t}2)"/><stop offset=".32" style="stop-color:var(--${t}1)"/><stop offset="1" style="stop-color:var(--${t}3)"/></linearGradient>`).join('')}
+const defs = () => `<defs><radialGradient id="g-moon-p" cx=".38" cy=".34" r=".75"><stop offset="0" stop-color="#fff6e2"/><stop offset=".6" stop-color="#f1dfbd"/><stop offset="1" stop-color="#d4b98d"/></radialGradient><radialGradient id="g-moon-m" cx=".38" cy=".34" r=".75"><stop offset="0" stop-color="#ffffff"/><stop offset=".6" stop-color="#ecebe6"/><stop offset="1" stop-color="#c9c7c0"/></radialGradient>${['m', 's', 'c', 'p'].map(t => `<linearGradient id="g-${t}" x1="0" x2="1" y1="0" y2="0"><stop offset="0" style="stop-color:var(--${t}2)"/><stop offset=".32" style="stop-color:var(--${t}1)"/><stop offset="1" style="stop-color:var(--${t}3)"/></linearGradient>`).join('')}
 <linearGradient id="g-glass" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".45" stop-color="#d9dce2" stop-opacity=".9"/><stop offset=".55" stop-color="#f4f5f7"/><stop offset="1" stop-color="#b9bdc5"/></linearGradient>
 <radialGradient id="g-glow"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>`;
 // Otro tono para los detalles: blanco y hueso llevan grafito; grafito y perla llevan blanco.
@@ -46,6 +46,12 @@ const DRAW = {
     `<rect class="metal" x="-1.6" y="-56" width="3.2" height="49" rx="1.6"/>` +
     lathe([[50, 24], [53, 24], [62, 21], [70, 14], [75, 5], [76, 0]], t) +
     `<ellipse class="bulb a-glow" cx="0" cy="-50" rx="16" ry="5"/>`,
+  moon: t => shadow(26, 9) +
+    `<ellipse class="glow a-glow" cx="0" cy="-58" rx="44" ry="40" fill="url(#g-glow)"/>` +
+    `<polygon class="wood-l" points="-27,-4 0,10 0,18 -27,4"/><polygon class="wood-r" points="0,10 27,-4 27,4 0,18"/><polygon class="wood-t" points="-27,-4 0,-18 27,-4 0,10"/>` +
+    `<ellipse class="coil" cx="0" cy="-4" rx="9" ry="4.6"/>` +
+    `<g class="a-float"><circle class="moon-ball" cx="0" cy="-60" r="29" fill="url(#g-moon-${t})"/>` +
+    `<circle class="crater" cx="-9" cy="-70" r="6"/><circle class="crater" cx="10" cy="-52" r="8"/><circle class="crater" cx="12" cy="-76" r="3.5"/><circle class="crater" cx="-14" cy="-50" r="3"/><circle class="crater" cx="-2" cy="-40" r="2.4"/></g>`,
   candle: t => shadow(24, 9) + box(-14, -14, 0, 28, 28, 40, t) +
     `<path class="wick" d="M0 -40 v-6"/><g class="a-flame"><path class="flame" d="M0 -60 C 5 -53 5 -48 0 -46 C -5 -48 -5 -53 0 -60Z"/></g>`,
   frame: t => shadow(30, 9, 6, 2) + box(-24, 0, 0, 52, 4, 64, t) +

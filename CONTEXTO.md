@@ -31,8 +31,8 @@ a eso. Mercado: Colombia, en español, precios en COP o USD a elección del clie
 - **Portada simple:** título a la izquierda y, a la derecha, el producto destacado en 3D mate (`assets/js/lamp3d.js`,
   la Lámpara Luna: luna con relieve y cráteres sobre base de madera con imán) que sobresale de la tarjeta (efecto pop-out), levita y se desarma en piezas con sus nombres como un
   esquema; el botón "Ver piezas" fija el esquema. Debajo: un panel perla con recuadro de fondo desplazado: nombre, precio, Agregar y tres
-  tarjetas (calificación con estrellas, unidades vendidas y reseñas) cuyos números suben al aparecer. Las cifras son de
-  ejemplo (`CONFIG.featured` en `data.js`) hasta tener ventas reales.
+  tarjetas (calificación con estrellas, unidades vendidas y reseñas) cuyos números suben al aparecer. Está oculto
+  (`showStats: false` en `CONFIG.featured`, `data.js`) hasta tener ventas reales; las cifras actuales son de ejemplo.
   Las redes sociales están solo en el pie. La mascota no aparece en la portada.
 - **Mascota:** gato de casa en 8 bits (naranja brasa, collar blanco perla con cascabel, contorno grueso zafiro),
   dibujado píxel a píxel en un lienzo de 36×40 en `assets/js/mascota.js`. Reemplaza a la araña y al gato en vector.
@@ -56,7 +56,8 @@ a eso. Mercado: Colombia, en español, precios en COP o USD a elección del clie
 - **2026-11-27 · Santiago · rama `portada-zafiro` (2.ª tanda):** la lámpara pasa a ser una lámpara luna realista
   (texturas de relieve, cráteres y brillo propias en `assets/img/luna-*.jpg`, base de madera, halo cálido); panel de
   datos con recuadro de fondo y números que suben; gato en 8 bits naranja brasa con collar perla y contorno grueso
-  (mismas reacciones, efectos en píxeles); menú en zafiro sobre una página más oscura y logo en blanco perla.
+  (mismas reacciones, efectos en píxeles); menú en zafiro sobre una página más oscura y logo en blanco perla. Por decisión de Santiago, el panel de cifras
+  queda oculto (`showStats: false` en `data.js`) hasta tener ventas y reseñas reales.
 - **2026-11-27 · Santiago · rama `portada-zafiro`:** portada nueva con la lámpara 3D mate (levita, se desarma en
   esquema de piezas, pop-out) y ventas/calificación de ejemplo; paleta zafiro profundo / blanco perla / naranja brasa;
   la araña se reemplazó por un gato de casa en vector (elegido por Santiago entre mochi, gato y planetita). Se retiró la

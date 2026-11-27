@@ -19,28 +19,40 @@ a eso. Mercado: Colombia, en español, precios en COP o USD a elección del clie
 
 ## Decisiones vigentes
 
-- **Paleta 60·30·10:** marfil antiguo `#ebe3d0` (60 %), negro piano `#0f0f11` (30 %), turquesa surf `#2bb3b1`
-  (10 %, solo acentos: activo, botones de pago y portada, insignias, foco, selección). Tema oscuro: se invierten
-  marfil y negro; el turquesa sigue de acento. Detalle en `DESIGN.md`.
+- **Paleta 60·30·10:** zafiro profundo `#0f2d5e` (60 %: lienzo, portada y tarjetas), blanco perla `#f3f0e8`
+  (30 %: texto, fondo de las imágenes de producto, barra lateral y pie) y naranja brasa `#d2461a` (10 %, solo acentos:
+  página activa, contador del carrito, filtros elegidos, insignias, estrellas, botones de portada y de pago). El tema
+  "noche" oscurece el zafiro (`#071a3a`). Detalle en `DESIGN.md`. Reemplaza a la paleta marfil/negro/turquesa.
 - **Esquinas rectas:** radios de 2 a 4 px en tarjetas, botones, chips, campos y paneles. No volver a formas de píldora.
 - **Catálogo primero:** textos cortos y títulos pequeños; sin palabras gigantes de fondo. Del kit de Astroly solo se
   usan tipografías (Urbanist, Geist Mono) y efectos (vidrio, movimiento); no su composición de landing.
 - **Navegación:** barra lateral (abajo en celular) con Inicio, Categoría (buscador), Tú (cuenta) y Carrito.
-- **Portada compacta:** título a la izquierda, redes a la derecha y la mascota sentada sobre la tarjeta de redes.
-- **Mascota:** araña de 8 bits hecha del isotipo (triángulo = cuerpo, hueco = ojo). Reacciona a lo que hace el cliente
-  (agregar, favoritos, filtros, formulario, etc.), se duerme sin actividad, se desliza por su hilo al hacer scroll y se
-  queda a esa altura; solo baja en la portada y en el pie. Código en `assets/js/mascota.js`.
+- **Portada simple:** título a la izquierda y, a la derecha, el producto destacado en 3D mate (`assets/js/lamp3d.js`,
+  la Lámpara Halo) que sobresale de la tarjeta (efecto pop-out), levita y se desarma en piezas con sus nombres como un
+  esquema; el botón "Ver piezas" fija el esquema. Debajo: nombre, precio, calificación, unidades vendidas y Agregar.
+  Las redes sociales están solo en el pie. La mascota no aparece en la portada.
+- **Mascota:** gato de casa en vector (blanco perla, collar naranja brasa), en `assets/js/mascota.js`. Reemplaza a
+  la araña de 8 bits. No aparece en la portada del inicio: al bajar entra de un salto y se sienta abajo a la derecha;
+  camina en su sitio mientras haces scroll y se sienta al parar; en el pie se sienta sobre el borde. Reacciona a lo que
+  hace el cliente (agregar, favoritos, filtros, búsqueda, formulario, tema, moneda, pago), sigue el cursor con la
+  mirada, ronronea si lo tocas, se acicala a los 14 s sin actividad y se duerme enroscado a los 30 s.
 - Móvil según las reglas compactas de Astroly: portada en una pantalla, cuadrícula de 2 columnas, chips con scroll
   horizontal, un solo elemento flotante, márgenes de 16 px.
 
 ## Pendientes
 
+- **Ventas y calificación del destacado son datos de ejemplo** (`CONFIG.featured` en `data.js`). No integrar a
+  `main` (que se publica) presentándolos como reales; en Shopify salen de las ventas y de la app de reseñas.
 - Usuarios reales de redes sociales (hoy `@astroly.ventas` es provisional).
 - Productos, fotos, precios y textos reales (los carga el socio).
 - Conversión a tema de Shopify, Markets (COP/USD) y checkout.
 
 ## Registro de sesiones
 
+- **2026-11-27 · Santiago · rama `portada-zafiro`:** portada nueva con la lámpara 3D mate (levita, se desarma en
+  esquema de piezas, pop-out) y ventas/calificación de ejemplo; paleta zafiro profundo / blanco perla / naranja brasa;
+  la araña se reemplazó por un gato de casa en vector (elegido por Santiago entre mochi, gato y planetita). Se retiró la
+  intro 3D del isotipo (`hero3d.js`).
 - **2026-11-27 · Santiago · rama `paleta-marfil`:** paleta marfil antiguo / negro piano / turquesa surf en todos los
   elementos y en la mascota; esquinas rectas (2–4 px); barra lateral en negro piano. Se agregó este sistema de
   memoria (`AGENTS.md`, `CONTEXTO.md`, `CONTRIBUTING.md`, plantillas) copiado del landing de Astroly.

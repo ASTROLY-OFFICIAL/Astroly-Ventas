@@ -6,6 +6,10 @@ export const CONFIG = {
   store: 'astroly',
   usdRate: 4000,            // 1 USD = 4.000 COP (solo para la vista previa; Shopify Markets lo calcula de verdad)
   defaultCurrency: 'COP',
+  // Producto destacado de la portada. sold, rating y reviews son DATOS DE EJEMPLO: en Shopify salen de las ventas
+  // reales y de la app de reseñas. No publicar estos números como reales.
+  featured: {id: 'lampara-halo', sold: 1240, rating: 4.8, reviews: 312,
+    parts: ['Pantalla en cúpula', 'Bombillo LED cálido', 'Rótula', 'Varilla', 'Base pesada']},
   socials: [
     {key: 'instagram', name: 'Instagram', handle: '@astroly.ventas', url: '#'},
     {key: 'tiktok', name: 'TikTok', handle: '@astroly.ventas', url: '#'},

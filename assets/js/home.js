@@ -25,8 +25,10 @@ function countUp() {
   };
   requestAnimationFrame(step);
 }
-$('[data-bar="sold"]', feat).style.setProperty('--to', '86%'); $('[data-bar="reviews"]', feat).style.setProperty('--to', '64%');
-new IntersectionObserver(([e], io) => { if (e.isIntersecting) { io.disconnect(); setTimeout(countUp, 350); } }, {threshold: .4}).observe($('.feature-stats', feat));
+if (F.showStats) {
+  $('[data-bar="sold"]', feat).style.setProperty('--to', '86%'); $('[data-bar="reviews"]', feat).style.setProperty('--to', '64%');
+  new IntersectionObserver(([e], io) => { if (e.isIntersecting) { io.disconnect(); setTimeout(countUp, 350); } }, {threshold: .4}).observe($('.feature-stats', feat));
+} else $('.feature-stats', feat).remove();
 $('[data-feature-add]', feat).addEventListener('click', e => {
   const b = e.currentTarget; b.disabled = true;
   flyToCart($('.lamp-stage', feat), artSVG(fp.art, fp.tones[0])).then(() => { store.add(fp.id, fp.tones[0], 1); b.disabled = false; });

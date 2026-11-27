@@ -1,0 +1,45 @@
+{% assign variant = item.selected_or_first_available_variant %}
+{% comment %}Al filtrar un color en la colección, conserva una variante de ese color en la foto, el precio y el enlace.{% endcomment %}
+{% for filter in filters %}
+  {% if filter.active_values.size > 0 and filter.param_name contains 'filter.v.option.' %}
+    {% assign option_key = filter.param_name | remove: 'filter.v.option.' | handleize %}
+    {% unless option_key == 'color' or option_key == 'colour' or option_key == 'tono' %}{% continue %}{% endunless %}
+    {% for product_option in item.options_with_values %}
+      {% assign option_name = product_option.name | handleize %}
+      {% if option_name == option_key %}
+        {% assign position = product_option.position | minus: 1 %}
+        {% assign selected_values = filter.active_values | map: 'value' %}
+        {% if selected_values contains variant.options[position] %}{% continue %}{% endif %}
+        {% for candidate in item.variants %}
+          {% if selected_values contains candidate.options[position] %}
+            {% assign variant = candidate %}
+            {% if candidate.available %}{% break %}{% endif %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endfor %}
+<article class="card" data-card>
+  <a class="card-stage" href="{{ variant.url }}" data-product-link>
+    {% assign photo = variant.featured_image | default: item.featured_image %}
+    {% render 'imagen', photo: photo, sizes: '(max-width: 899px) 48vw, 24vw', loading: 'lazy' %}
+    <span class="sr">{{ item.title | escape }}</span>
+  </a>
+  <div class="card-body">
+    <h3><a href="{{ variant.url }}" data-product-link>{{ item.title | escape }}</a></h3>
+    <span class="price" data-price>{{ variant.price | money_with_currency }}</span>
+    {% unless item.has_only_default_variant %}
+      <label>Variante
+        <select data-card-variant>
+          {% for v in item.variants %}
+            <option value="{{ v.url | escape }}" data-price="{{ v.price | money_with_currency | escape }}"
+              {% assign photo = v.featured_image | default: item.featured_image %}
+              {% if photo %}data-alt="{{ photo.alt | default: item.title | escape }}" data-image="{{ photo | image_url: width: 600 }}"{% endif %}
+              {% if v.id == variant.id %}selected{% endif %}>{{ v.title | escape }}{% unless v.available %} · Agotada{% endunless %}</option>
+          {% endfor %}
+        </select>
+      </label>
+    {% endunless %}
+  </div>
+</article>

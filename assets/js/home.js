@@ -1,11 +1,17 @@
 // Inicio: portada compacta, novedades y catálogo con filtros.
-import {shell, $, $$, ICON, card, bindCards, reduce, store, COLLECTIONS, CONFIG, TONE_NAMES, esc, norm} from './ui.js';
-import {PRODUCTS} from './data.js';
+import {shell, productUrl, artSVG, $, $$, ICON, card, bindCards, reduce, store, COLLECTIONS, CONFIG, TONE_NAMES, esc, norm} from './ui.js';
+import {PRODUCTS, byId} from './data.js';
 
 const mascot = shell();
 
-// ── Redes
-$('#social-list').innerHTML = CONFIG.socials.map(s => `<li><a href="${s.url}" class="social-row"><span class="social-icon">${ICON[s.key]}</span><span class="social-name">${s.name}</span><span class="social-handle mono">${esc(s.handle)}</span></a></li>`).join('');
+const featured = byId('lampara-halo') || PRODUCTS[0];
+if (featured) {
+  const link = $('[data-featured]');
+  link.href = productUrl(featured.id, featured.tones[0]);
+  link.innerHTML = `<span class="featured-art">${artSVG(featured.art, featured.tones[0])}</span>
+    <span class="featured-info"><strong>${esc(featured.name)}</strong>${store.priceTag(featured.price)}<span>Ver producto →</span></span>`;
+  link.hidden = false;
+}
 $('.search-icon').innerHTML = ICON.search;
 
 // ── Intro: el isotipo 3D gira sobre la tarjeta de redes y se vuelve la mascota (primera visita).

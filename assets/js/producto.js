@@ -14,7 +14,7 @@ $('[data-col]').textContent = collectionName(p.col);
 $('.pdp-info h1').textContent = p.name;
 $('.pdp-price').innerHTML = store.priceTag(p.price);
 $('.pdp-short').textContent = p.short;
-$('[data-desc]').textContent = `${p.short} Este texto es de ejemplo: aquí va la descripción completa del producto.`;
+$('[data-desc]').textContent = p.short;
 $('.giant-tag').textContent = `${collectionName(p.col)} · ${p.name}`;
 
 // Vistas: frente, detalle y de noche.

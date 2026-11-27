@@ -1,0 +1,5 @@
+<h1>Colecciones</h1>
+{% paginate collections by 24 %}
+<div class="grid">{% for group in collections %}<a class="card" href="{{ group.url }}">{% render 'imagen', photo: group.featured_image, sizes: '40vw', loading: 'lazy' %}<span class="card-body">{{ group.title | escape }}</span></a>{% endfor %}</div>
+{{ paginate | default_pagination }}
+{% endpaginate %}

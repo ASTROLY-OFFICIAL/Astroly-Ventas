@@ -3,13 +3,12 @@
 // add / setQty / remove quedan con la misma forma para cambiarlas por esas llamadas.
 import {CONFIG, byId} from './data.js';
 
+import {emit} from './events.js';
+export {on, emit} from './events.js';
+
 const KEY = {cart: 'astroly-cart', cur: 'astroly-currency', fav: 'astroly-favs'};
 const read = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } };
 const write = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
-
-const bus = new EventTarget();
-export const on = (type, fn) => bus.addEventListener(type, e => fn(e.detail));
-export const emit = (type, detail = {}) => bus.dispatchEvent(new CustomEvent(type, {detail}));
 
 // Moneda: COP o USD, elegida por el cliente y recordada.
 let currency = read(KEY.cur, CONFIG.defaultCurrency);
@@ -70,8 +69,3 @@ export function toggleFav(id) {
 addEventListener('storage', e => {
   if (e.key === KEY.cart) { cart = read(KEY.cart, []).filter(l => byId(l.id)); emit('cart', {type: 'sync'}); }
 });
-
-// Cuenta del cliente (en Shopify: cuentas de cliente; aquí se guarda en el navegador para la vista previa).
-const KEY_ACC = 'astroly-account';
-export const getAccount = () => read(KEY_ACC, {});
-export function saveAccount(data) { write(KEY_ACC, data); emit('account', data); }

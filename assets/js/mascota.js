@@ -34,9 +34,9 @@ const BODY = (() => {
   return {cells, eye, has, rows, top, bottom, ex, ey, er, cx: 28};
 })();
 
-const PAL = {
-  light: {body: '#0b0b0d', hi: '#3a3e45', lo: '#000000', eye: '#f2f2f2', pupil: '#0a0a0a', line: '#0b0b0d', fx: '#0a0a0a', soft: '#262626', web: 'rgba(0,0,0,.28)', out: null},
-  dark: {body: '#0b0b0d', hi: '#4b4f56', lo: '#000000', eye: '#f2f2f2', pupil: '#0a0a0a', line: '#d9dbe0', fx: '#f2f2f2', soft: '#8c8c8c', web: 'rgba(255,255,255,.3)', out: '#d9dbe0'}
+const PAL = { // negro piano, marfil antiguo y turquesa surf para los efectos
+  light: {body: '#0f0f11', hi: '#3a3a3f', lo: '#000000', eye: '#f6f1e6', pupil: '#0f0f11', line: '#0f0f11', fx: '#138f8c', soft: '#4a463e', web: 'rgba(15,15,17,.28)', out: null},
+  dark: {body: '#0f0f11', hi: '#4a4a50', lo: '#000000', eye: '#f6f1e6', pupil: '#0f0f11', line: '#ebe3d0', fx: '#3cc9c6', soft: '#a39d8f', web: 'rgba(235,227,208,.3)', out: '#ebe3d0'}
 };
 
 // Glifos de 8 bits para los efectos.

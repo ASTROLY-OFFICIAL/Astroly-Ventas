@@ -1,8 +1,12 @@
 # astroly · tienda en línea (diseño e interfaz)
 
 Prototipo navegable de la tienda: **inicio y catálogo en un solo recorrido**, ficha de producto y carrito.
-Usa el kit de diseño de Astroly (Urbanist y Geist Mono, lienzo gris o negro, bandas invertidas, palabras
-gigantes, vidrio, tarjetas blancas, isotipo 3D y entradas palabra por palabra) y la mascota de 8 bits.
+Paleta marfil antiguo (60 %), negro piano (30 %) y turquesa surf (10 %), esquinas rectas, tipografías Urbanist y
+Geist Mono del kit de Astroly, isotipo 3D y una mascota de 8 bits.
+
+Publicada en https://astrolytienda.vercel.app: cada cambio que entra a `main` se publica solo.
+
+**Antes de trabajar en el repositorio (personas o IA), lee [AGENTS.md](AGENTS.md) y [CONTEXTO.md](CONTEXTO.md).**
 
 ## Cómo verla
 
@@ -69,7 +73,9 @@ La cuenta de Shopify ya existe; el siguiente paso es convertir esto en un tema (
 
 ## Archivos
 
-- `assets/css/tienda.css`: todo el estilo (tokens del kit, temas, móvil compacto, movimiento reducido).
+- `assets/css/tienda.css`: todo el estilo (paleta, temas, móvil compacto, movimiento reducido).
 - `assets/js/`: `ui.js` (piezas compartidas), `home.js`, `producto.js`, `carrito.js`, `cuenta.js`, `store.js`, `data.js`,
   `art.js`, `mascota.js`, `hero3d.js`.
 - `assets/vendor/`: three.js (licencia MIT). `assets/fonts/`: Urbanist y Geist Mono. `assets/img/`: isotipos.
+- Colaboración: `AGENTS.md` (reglas), `CONTEXTO.md` (memoria y resumen de decisiones), `CONTRIBUTING.md` (paso a paso),
+  `DESIGN.md` (sistema visual), `PRODUCT.md` (qué es la tienda), `INSTRUCCIONES_OTRA_IA.md` y las plantillas de `.github/`.

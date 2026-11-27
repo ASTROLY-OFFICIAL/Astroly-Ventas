@@ -46,7 +46,7 @@ function toggleTheme() {
 function sidebar() {
   const cur = store.getCurrency(), p = page();
   const nav = document.createElement('aside');
-  nav.className = 'sidebar';
+  nav.className = 'sidebar band';
   nav.innerHTML = `
     <a class="side-brand" href="index.html" aria-label="astroly, inicio"><img src="assets/img/isotipo.svg" alt=""><span>astroly</span></a>
     <nav class="side-nav" aria-label="Principal">
@@ -147,7 +147,7 @@ function drawer() {
   el.innerHTML = `<div class="drawer-head"><h2>Carrito <span class="mono" data-cart-count></span></h2><button type="button" class="icon-btn" data-close aria-label="Cerrar carrito">${ICON.close}</button></div>
     <div class="drawer-lines"></div>
     <div class="drawer-foot"><div class="row"><span>Subtotal</span><strong data-cart-total></strong></div><p class="hint">Envío e impuestos se calculan al pagar.</p>
-    <button type="button" class="button" data-checkout>Pagar ahora</button><a class="button ghost" href="carrito.html">Ver carrito</a></div>`;
+    <button type="button" class="button accent" data-checkout>Pagar ahora</button><a class="button ghost" href="carrito.html">Ver carrito</a></div>`;
   const scrim = document.createElement('div'); scrim.className = 'scrim';
   document.body.append(scrim, el);
   scrim.addEventListener('click', () => { closeDrawer(); toggleSearch(false); });

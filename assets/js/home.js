@@ -12,9 +12,21 @@ const feat = $('[data-feature]');
 $('[data-feature-name]', feat).textContent = fp.name;
 $('[data-feature-link]', feat).href = `producto.html?id=${fp.id}`;
 $('[data-feature-price]', feat).innerHTML = store.priceTag(fp.price);
-$('[data-stars]', feat).innerHTML = [1, 2, 3, 4, 5].map(i => `<i class="${F.rating >= i - .25 ? 'on' : F.rating >= i - .75 ? 'half' : ''}"></i>`).join('');
-$('[data-rating]', feat).textContent = `${F.rating.toLocaleString('es-CO')} (${F.reviews})`;
-$('[data-sold]', feat).textContent = `${F.sold.toLocaleString('es-CO')} vendidas`;
+$('[data-stars]', feat).innerHTML = [1, 2, 3, 4, 5].map(i => `<i style="--fill:${Math.round(Math.min(1, Math.max(0, F.rating - i + 1)) * 100)}%"></i>`).join('');
+// Cifras: cuentan desde cero cuando la portada está a la vista (datos de ejemplo en CONFIG.featured).
+function countUp() {
+  const goals = {rating: F.rating, sold: F.sold, reviews: F.reviews}, t0 = performance.now(), dur = reduce.matches ? 0 : 1600;
+  const fmt = (k, v) => k === 'rating' ? v.toLocaleString('es-CO', {minimumFractionDigits: 1, maximumFractionDigits: 1}) : Math.round(v).toLocaleString('es-CO');
+  feat.classList.add('is-counting');
+  const step = now => {
+    const k = dur ? Math.min(1, (now - t0) / dur) : 1, e = 1 - Math.pow(1 - k, 4);
+    $$('[data-count]', feat).forEach(el => { const key = el.dataset.count; el.textContent = fmt(key, goals[key] * e); });
+    if (k < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+$('[data-bar="sold"]', feat).style.setProperty('--to', '86%'); $('[data-bar="reviews"]', feat).style.setProperty('--to', '64%');
+new IntersectionObserver(([e], io) => { if (e.isIntersecting) { io.disconnect(); setTimeout(countUp, 350); } }, {threshold: .4}).observe($('.feature-stats', feat));
 $('[data-feature-add]', feat).addEventListener('click', e => {
   const b = e.currentTarget; b.disabled = true;
   flyToCart($('.lamp-stage', feat), artSVG(fp.art, fp.tones[0])).then(() => { store.add(fp.id, fp.tones[0], 1); b.disabled = false; });

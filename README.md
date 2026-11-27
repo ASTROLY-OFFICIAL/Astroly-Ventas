@@ -35,7 +35,7 @@ la composición es de tienda, con textos cortos para que la atención quede en l
 
 ## La mascota
 
-Un gato de casa en vector (blanco perla con collar naranja brasa). Código en `assets/js/mascota.js`.
+Un gato de casa en 8 bits (naranja brasa, collar blanco perla y contorno grueso), dibujado píxel a píxel. Código en `assets/js/mascota.js`.
 
 - No sale en la portada. Al bajar entra de un salto y se sienta abajo a la derecha; camina en su sitio mientras haces
   scroll y se sienta al parar. En el pie se sienta sobre el borde y saluda.

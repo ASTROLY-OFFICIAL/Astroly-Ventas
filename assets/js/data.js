@@ -8,8 +8,8 @@ export const CONFIG = {
   defaultCurrency: 'COP',
   // Producto destacado de la portada. sold, rating y reviews son DATOS DE EJEMPLO: en Shopify salen de las ventas
   // reales y de la app de reseñas. No publicar estos números como reales.
-  featured: {id: 'lampara-halo', sold: 1240, rating: 4.8, reviews: 312,
-    parts: ['Pantalla en cúpula', 'Bombillo LED cálido', 'Rótula', 'Varilla', 'Base pesada']},
+  featured: {id: 'lampara-luna', sold: 1240, rating: 4.8, reviews: 312,
+    parts: ['Esfera lunar', 'Luz LED cálida', 'Media esfera', 'Imán de levitación', 'Base de madera']},
   socials: [
     {key: 'instagram', name: 'Instagram', handle: '@astroly.ventas', url: '#'},
     {key: 'tiktok', name: 'TikTok', handle: '@astroly.ventas', url: '#'},
@@ -32,6 +32,8 @@ export const COLLECTIONS = [
 export const PRODUCTS = [
   {id: 'jarron-orbita', name: 'Jarrón Órbita', col: 'sala', art: 'vase', price: 129000, tones: ['m', 's', 'c'], badge: 'Nuevo',
     short: 'Cerámica mate de cuello alto para ramas secas o sola sobre la mesa.'},
+  {id: 'lampara-luna', name: 'Lámpara Luna', col: 'luz', art: 'moon', price: 189000, tones: ['p', 'm'], badge: 'Destacado',
+    short: 'Luna con relieve de cráteres que levita y gira sobre una base de madera. Luz cálida regulable.'},
   {id: 'lampara-halo', name: 'Lámpara Halo', col: 'luz', art: 'lamp', price: 219000, tones: ['m', 's'], badge: 'Nuevo',
     short: 'Pantalla en cúpula y base pesada. Luz cálida y difusa para la mesa de noche.'},
   {id: 'vela-monolito', name: 'Vela Monolito', col: 'dormitorio', art: 'candle', price: 49000, tones: ['p', 's'],

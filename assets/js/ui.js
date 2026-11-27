@@ -46,7 +46,7 @@ function toggleTheme() {
 function sidebar() {
   const cur = store.getCurrency(), p = page();
   const nav = document.createElement('aside');
-  nav.className = 'sidebar band';
+  nav.className = 'sidebar';
   nav.innerHTML = `
     <a class="side-brand" href="index.html" aria-label="astroly, inicio"><img src="assets/img/isotipo.svg" alt=""><span>astroly</span></a>
     <nav class="side-nav" aria-label="Principal">

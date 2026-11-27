@@ -1,4 +1,5 @@
-// La mascota de astroly: un gato de casa en vector, blanco perla con collar naranja brasa.
+// La mascota de astroly: un gato de casa en 8 bits, naranja brasa con collar blanco perla.
+// Se dibuja píxel a píxel en un lienzo de 36×40 (con contorno grueso) y se escala con image-rendering: pixelated.
 // Reacciona a lo que hace el cliente, se acicala si nadie hace nada, se duerme enroscado y se despierta.
 //
 // Dónde está:
@@ -14,71 +15,39 @@ const rand = (a, b) => a + Math.random() * (b - a);
 const pick = list => list[Math.floor(Math.random() * list.length)];
 const clamp = (v, a, b) => Math.min(Math.max(v, a), b);
 
-const SVG = `<svg class="cat" viewBox="0 0 100 100" aria-hidden="true">
-  <ellipse class="c-shadow" cx="50" cy="96" rx="27" ry="3.4"/>
-  <g class="c-awake">
-    <g class="c-tail"><path class="o" d="M64 91C82 93 92 82 90 67C89 59 85 54 80 55"/><path class="f" d="M64 91C82 93 92 82 90 67C89 59 85 54 80 55"/></g>
-    <g class="c-body">
-      <path class="fill" d="M29 93C25 76 31 58 50 57C69 58 75 76 71 93Z"/>
-      <path class="belly" d="M41 92C39 80 43 70 50 69C57 70 61 80 59 92Z"/>
-      <g class="c-paw-l"><ellipse class="fill" cx="40" cy="92.5" rx="7.5" ry="4.6"/><path class="toe" d="M37.5 92v2.6M42.5 92v2.6"/></g>
-      <g class="c-paw-r"><ellipse class="fill" cx="60" cy="92.5" rx="7.5" ry="4.6"/><path class="toe" d="M57.5 92v2.6M62.5 92v2.6"/></g>
-    </g>
-    <g class="c-head">
-      <g class="c-ear-l"><path class="fill" d="M27 35L28.5 11L45 24Z"/><path class="inner" d="M31 28L31.8 17.5L40 24.5Z"/></g>
-      <g class="c-ear-r"><path class="fill" d="M73 35L71.5 11L55 24Z"/><path class="inner" d="M69 28L68.2 17.5L60 24.5Z"/></g>
-      <ellipse class="fill" cx="50" cy="38" rx="25" ry="19.5"/>
-      <circle class="cheek" cx="35.5" cy="45" r="3.8"/><circle class="cheek" cx="64.5" cy="45" r="3.8"/>
-      <g class="c-eyes">
-        <g class="e e-open"><g class="c-eye-l"><ellipse cx="41" cy="38" rx="3.8" ry="4.8"/><circle class="shine" cx="42.3" cy="36.2" r="1.3"/></g>
-          <g class="c-eye-r"><ellipse cx="59" cy="38" rx="3.8" ry="4.8"/><circle class="shine" cx="60.3" cy="36.2" r="1.3"/></g></g>
-        <path class="e e-happy line" d="M37 39.5Q41 34.5 45 39.5M55 39.5Q59 34.5 63 39.5"/>
-        <path class="e e-closed line" d="M37 38.5Q41 41.5 45 38.5M55 38.5Q59 41.5 63 38.5"/>
-        <path class="e e-heart solid" d="M41 42.6l-3.7-3.6a2.3 2.3 0 0 1 3.7-2.7a2.3 2.3 0 0 1 3.7 2.7ZM59 42.6l-3.7-3.6a2.3 2.3 0 0 1 3.7-2.7a2.3 2.3 0 0 1 3.7 2.7Z"/>
-        <path class="e e-dizzy line" d="M41 38m-1 0a1 1 0 1 1 2 0a2 2 0 1 1-4 0a3 3 0 1 1 6 0M59 38m-1 0a1 1 0 1 1 2 0a2 2 0 1 1-4 0a3 3 0 1 1 6 0"/>
-        <g class="e e-big"><circle cx="41" cy="38" r="5.2"/><circle cx="59" cy="38" r="5.2"/><circle class="shine" cx="42.8" cy="36" r="1.7"/><circle class="shine" cx="60.8" cy="36" r="1.7"/></g>
-        <path class="e e-half line" d="M37 38.5H45M55 38.5H63"/>
-      </g>
-      <path class="nose" d="M47.6 44.2H52.4L50 47Z"/>
-      <path class="c-mouth line" d="M46 48.4Q48 50.6 50 47.8Q52 50.6 54 48.4"/>
-      <ellipse class="c-mouth-open" cx="50" cy="50" rx="2.4" ry="2.8"/>
-      <path class="whisk" d="M35 44.5L23 42.5M35 47L23 48.5M65 44.5L77 42.5M65 47L77 48.5"/>
-      <g class="c-shades"><path d="M33 34H67V36.5H33Z"/><rect x="34" y="34" width="13" height="8" rx="2.5"/><rect x="53" y="34" width="13" height="8" rx="2.5"/></g>
-    </g>
-    <g class="c-collar"><path d="M34 55Q50 61.5 66 55"/><circle cx="50" cy="60" r="2.8"/></g>
-    <g class="c-loupe"><circle cx="62" cy="38" r="7.5"/><path d="M67.5 43.5L74 52"/></g>
-    <g class="c-paw-up"><ellipse class="fill" cx="68" cy="58" rx="5.6" ry="6.8"/><path class="toe" d="M65.5 54.5v-2M70.5 54.5v-2"/></g>
-  </g>
-  <g class="c-asleep">
-    <path class="o" d="M80 90C96 88 96 72 84 72"/><path class="f" d="M80 90C96 88 96 72 84 72"/>
-    <path class="fill" d="M22 93C20 80 34 71 54 71C74 71 84 80 82 93Z"/>
-    <g class="c-sleep-head"><path class="fill" d="M20 70L21 55L31 62Z"/><path class="fill" d="M44 70L42.5 55L33 62Z"/>
-      <ellipse class="fill" cx="32" cy="78" rx="15" ry="12"/>
-      <path class="line" d="M24 78Q27 80.5 30 78M34 78Q37 80.5 40 78"/><path class="nose" d="M30.6 83H33.4L32 84.6Z"/></g>
-    <path class="o" d="M50 92C62 95 78 94 84 90"/><path class="f" d="M50 92C62 95 78 94 84 90"/>
-  </g>
-</svg>`;
+const W = 36, H = 40, OX = 2, OY = 8;          // lienzo en píxeles; el gato ocupa 32×32 abajo
+const COL = {
+  out: '#06142e', body: '#d2461a', dark: '#a8360f', light: '#ff8a55', pearl: '#f3f0e8', eye: '#06142e',
+  nose: '#f7b9a4', inner: '#f8c8b4', bell: '#f6c35b', fx: '#ff8a55', fx2: '#f3f0e8', tongue: '#f28c8c'
+};
+// Glifos de 8 bits para los efectos.
+const GLYPH = {
+  z: ['111', '001', '010', '100', '111'],
+  heart: ['01010', '11111', '11111', '01110', '00100'],
+  bang: ['1', '1', '1', '0', '1'],
+  ask: ['111', '001', '011', '000', '010'],
+  note: ['0011', '0010', '0010', '1110', '1100'],
+  star: ['010', '111', '010'],
+  coin: ['0110', '1001', '1011', '0110'],
+  check: ['0001', '0010', '1100', '0100']
+};
+const FXCOL = {z: COL.fx2, ask: COL.fx2, bang: COL.fx2};
 
 export function createMascot({root = document.body} = {}) {
   const el = document.createElement('div');
   el.className = 'mascot'; el.dataset.mode = 'hidden';
-  el.innerHTML = `<button class="mascot-body" type="button" aria-label="Gato de astroly: tócalo para saludar">${SVG}</button>
-    <div class="mascot-fx" aria-hidden="true"></div>
+  el.innerHTML = `<button class="mascot-body" type="button" aria-label="Gato de astroly: tócalo para saludar">
+      <canvas width="${W}" height="${H}"></canvas></button>
     <p class="mascot-bubble" role="status" aria-live="polite"></p>`;
   root.append(el);
-  const svg = el.querySelector('svg'), btn = el.querySelector('.mascot-body');
-  const bubble = el.querySelector('.mascot-bubble'), fx = el.querySelector('.mascot-fx');
-  const g = sel => svg.querySelector(sel);
-  const P = {
-    tail: g('.c-tail'), body: g('.c-body'), head: g('.c-head'), eyes: g('.c-eyes'), earL: g('.c-ear-l'), earR: g('.c-ear-r'),
-    eyeL: g('.c-eye-l'), eyeR: g('.c-eye-r'), pawL: g('.c-paw-l'), pawR: g('.c-paw-r'), pawUp: g('.c-paw-up'),
-    collar: g('.c-collar'), sleepHead: g('.c-sleep-head'), asleep: g('.c-asleep'), shadow: g('.c-shadow')
-  };
+  const canvas = el.querySelector('canvas'), ctx = canvas.getContext('2d'), btn = el.querySelector('.mascot-body');
+  const bubble = el.querySelector('.mascot-bubble');
+  const img = ctx.createImageData(W, H);
 
   const S = {
     mood: 'idle', moodUntil: 0, look: [0, 0], lookTarget: [0, 0], blinkAt: performance.now() + 2500,
     jumpStart: 0, jumps: 0, lastInput: performance.now(), clicks: [], sleeping: false,
-    pos: null, mode: 'hidden', lastScrollT: 0, scrollDir: 1, saidFooter: false, entered: false
+    pos: null, mode: 'hidden', lastScrollT: 0, scrollDir: 1, saidFooter: false, entered: false, particles: []
   };
 
   let bubbleTimer = 0;
@@ -87,15 +56,9 @@ export function createMascot({root = document.body} = {}) {
     bubble.textContent = text; el.classList.add('is-talking');
     clearTimeout(bubbleTimer); bubbleTimer = setTimeout(() => el.classList.remove('is-talking'), ms);
   }
-  const GLYPH = {heart: '♥', z: 'z', note: '♪', star: '✦', coin: '$', bang: '!', ask: '?', check: '✓', drop: '·', purr: '~'};
   function emitFx(kind, n = 1, {dx = 0} = {}) {
     if (S.mode === 'hidden') return;
-    for (let i = 0; i < n; i++) {
-      const s = document.createElement('span'); s.className = `fx fx-${kind}`; s.textContent = GLYPH[kind] || '✦';
-      s.style.left = `${50 + dx + rand(-22, 22)}%`; s.style.top = `${rand(2, 22)}%`;
-      s.style.setProperty('--dx', `${rand(-18, 18)}px`); s.style.animationDelay = `${i * 90}ms`;
-      fx.append(s); s.addEventListener('animationend', () => s.remove());
-    }
+    for (let i = 0; i < n; i++) S.particles.push({kind, x: 18 + dx + rand(-8, 6), y: 8 + rand(-2, 3), vx: rand(-.35, .35), vy: rand(-.9, -.45), life: rand(1.1, 1.7), age: -i * .1});
   }
   function setMood(mood, ms = 1600) { S.mood = mood; S.moodUntil = performance.now() + ms; }
   function hop(times = 1) { if (reduce.matches) return; S.jumps = times; S.jumpStart = performance.now(); }
@@ -169,81 +132,177 @@ export function createMascot({root = document.body} = {}) {
     }
   }
 
-  // ── Dibujo: cada parte se mueve con transform (origen explícito en coordenadas del SVG).
+  // ── Dibujo en píxeles: cada forma se prueba en coordenadas locales (con giro y desplazamiento),
+  // después una pasada de contorno grueso, y encima bigotes y efectos sin contorno.
   const EYE_FOR = {
     happy: 'happy', love: 'heart', dizzy: 'dizzy', startle: 'big', curious: 'big', magnify: 'big', purr: 'closed',
     sleepy: 'half', meh: 'half', groom: 'closed', celebrate: 'happy', dance: 'happy', wave: 'happy', shades: 'open'
   };
+  const grid = new Array(W * H), top = new Array(W * H);
+  const ell = (x, y, cx, cy, rx, ry) => ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 <= 1;
+  const tri = (x, y, [ax, ay], [bx, by], [cx, cy]) => {
+    const s1 = (x - bx) * (ay - by) - (ax - bx) * (y - by), s2 = (x - cx) * (by - cy) - (bx - cx) * (y - cy), s3 = (x - ax) * (cy - ay) - (cx - ax) * (y - ay);
+    return !((s1 < 0 || s2 < 0 || s3 < 0) && (s1 > 0 || s2 > 0 || s3 > 0));
+  };
+  // Pinta en la rejilla todas las celdas donde test(x, y) devuelve un color; T: giro (rad) y traslado.
+  function fill(test, T = {}) {
+    const {a = 0, px = 16, py = 20, dx = 0, dy = 0} = T, c = Math.cos(-a), s = Math.sin(-a);
+    for (let gy = 0; gy < H; gy++) for (let gx = 0; gx < W; gx++) {
+      let x = gx - OX + .5 - dx - px, y = gy - OY + .5 - dy - py;
+      const lx = x * c - y * s + px, ly = x * s + y * c + py;
+      const col = test(lx, ly); if (col) grid[gy * W + gx] = col;
+    }
+  }
+  // Pone píxeles sueltos (coordenadas locales) aplicando el mismo giro.
+  function dots(list, col, T = {}, layer = grid) {
+    const {a = 0, px = 16, py = 20, dx = 0, dy = 0} = T, c = Math.cos(a), s = Math.sin(a);
+    list.forEach(([x, y]) => {
+      const rx = x + .5 - px, ry = y + .5 - py;
+      const gx = Math.floor(rx * c - ry * s + px + dx + OX), gy = Math.floor(rx * s + ry * c + py + dy + OY);
+      if (gx >= 0 && gy >= 0 && gx < W && gy < H) layer[gy * W + gx] = col;
+    });
+  }
+  const EYES = {
+    open: [[0, 0, 'e'], [1, 0, 'p'], [0, 1, 'e'], [1, 1, 'e']],
+    big: [[-1, -1, 'e'], [0, -1, 'e'], [1, -1, 'p'], [-1, 0, 'e'], [0, 0, 'e'], [1, 0, 'e'], [-1, 1, 'e'], [0, 1, 'e'], [1, 1, 'e']],
+    happy: [[-1, 1, 'e'], [0, 0, 'e'], [1, 0, 'e'], [2, 1, 'e']],
+    closed: [[-1, 0, 'e'], [0, 1, 'e'], [1, 1, 'e'], [2, 0, 'e']],
+    half: [[-1, 1, 'e'], [0, 1, 'e'], [1, 1, 'e'], [2, 1, 'e']],
+    heart: [[-1, -1, 'p'], [1, -1, 'p'], [-1, 0, 'p'], [0, 0, 'p'], [1, 0, 'p'], [0, 1, 'p']],
+    dizzy: [[-1, -1, 'e'], [0, -1, 'e'], [1, -1, 'e'], [1, 0, 'e'], [1, 1, 'e'], [0, 1, 'e'], [-1, 1, 'e'], [-1, 0, 'e']]
+  };
   function frame(now) {
-    const t = now / 1000, idleFor = (now - S.lastInput) / 1000;
+    const t = now / 1000, idleFor = (now - S.lastInput) / 1000, dt = Math.min((now - (S.lastT || now)) / 1000, .05); S.lastT = now;
     if (S.mood !== 'idle' && now > S.moodUntil && S.mood !== 'groom') S.mood = 'idle';
     if (!S.sleeping && idleFor > 30 && !reduce.matches) { S.sleeping = true; el.classList.add('is-asleep'); S.mood = 'idle'; }
     else if (!S.sleeping && idleFor > 14 && S.mood === 'idle' && !reduce.matches) S.mood = 'groom';
     const m = S.sleeping ? 'sleep' : S.mood;
     const walking = !S.sleeping && S.mode === 'corner' && now - S.lastScrollT < 280 && !reduce.matches;
+    grid.fill(null); top.fill(null);
 
-    // mirada
+    // mirada (máximo un píxel)
     S.look[0] += (S.lookTarget[0] - S.look[0]) * .15; S.look[1] += (S.lookTarget[1] - S.look[1]) * .15;
     let [lx, ly] = S.look;
-    if (m === 'read') { lx = Math.sin(t * 5) * 1.6; ly = 1.2; }
-    if (m === 'write') { lx = 0; ly = 1.8; }
-    // parpadeo
-    let blink = 1;
-    if (now > S.blinkAt) { const k = (now - S.blinkAt) / 140; blink = k < 1 ? 1 - Math.sin(k * Math.PI) * .92 : 1; if (k >= 1) S.blinkAt = now + rand(2200, 5200); }
-    const eye = EYE_FOR[m] || 'open';
-    svg.dataset.eye = eye; svg.dataset.mood = m;
-    P.eyes.setAttribute('transform', eye === 'open' ? `translate(0 ${38 * (1 - blink)}) scale(1 ${blink})` : '');
-    const pupil = `translate(${(lx * 1.3).toFixed(2)} ${(ly * 1.1).toFixed(2)})`;
-    P.eyeL.setAttribute('transform', pupil); P.eyeR.setAttribute('transform', pupil);
+    if (m === 'read') { lx = Math.sin(t * 5) * 1.2; ly = .8; }
+    if (m === 'write') { lx = 0; ly = 1; }
+    let blinking = false;
+    if (now > S.blinkAt) { if (now - S.blinkAt < 140) blinking = true; else S.blinkAt = now + rand(2200, 5200); }
 
-    // cabeza
-    let hr = lx * 2, hy = 0, hx = 0;
-    if (m === 'confused') hr = 13;
-    if (m === 'no') hr = Math.sin(t * 22) * 9;
-    if (m === 'dizzy') { hr = Math.sin(t * 7) * 8; hx = Math.cos(t * 7) * 1.5; }
-    if (m === 'dance') hr = Math.sin(t * 9) * 10;
-    if (m === 'sad') { hy = 3; hr = -4; }
-    if (m === 'write') { hy = 2; hr = -6; }
-    if (m === 'groom') { hy = 2.5; hr = 10; }
-    if (m === 'curious') hr = lx * 4 + 6;
-    if (m === 'purr') hx = Math.sin(t * 60) * .35;
-    P.head.setAttribute('transform', `translate(${hx.toFixed(2)} ${hy.toFixed(2)}) rotate(${hr.toFixed(2)} 50 56)`);
-    // orejas: atentas, caídas o atrás
-    const earDown = m === 'sad' || m === 'no' ? 14 : m === 'startle' || m === 'curious' ? -6 : Math.sin(t * .7) > .97 ? 8 : 0;
-    P.earL.setAttribute('transform', `rotate(${-earDown} 36 30)`); P.earR.setAttribute('transform', `rotate(${earDown} 64 30)`);
+    if (m === 'sleep') {
+      const br = Math.sin(t * 1.6) > 0 ? 0 : 1;
+      fill((x, y) => { const d = Math.hypot(x - 27, y - 25.5); return d < 5.6 && d > 3.4 && (x > 26 || y > 26) ? COL.body : null; });
+      fill((x, y) => ell(x, y, 18, 26.5 + br * .3, 11, 5.6 - br * .3) && y < 31 ? (x > 23 ? COL.dark : COL.body) : null);
+      const T = {dy: br * .3};
+      fill((x, y) => (tri(x, y, [5, 23], [5.5, 17], [9.5, 21]) || tri(x, y, [10, 20.5], [13.5, 17], [14, 23])) ? COL.body : null, T);
+      fill((x, y) => ell(x, y, 9.5, 25.5, 6, 4.8) ? COL.body : null, T);
+      fill((x, y) => ell(x, y, 9.5, 27, 3.4, 2) ? COL.light : null, T);
+      fill((x, y) => ell(x, y, 19, 30, 9, 1.6) && x > 13 ? COL.light : null);
+      dots([[6, 21], [12, 21]], COL.inner, T);
+      dots([[6, 25], [7, 26], [8, 26], [11, 26], [12, 26], [13, 25], [9, 27], [10, 27]].slice(0, 6), COL.eye, T);
+      dots([[9, 27], [10, 27]], COL.nose, T);
+      dots([[16, 23], [17, 23], [18, 23], [19, 23]], COL.pearl, T);
+      if (now - (S.lastZ || 0) > 1500) { S.lastZ = now; emitFx('z', 1, {dx: -8}); }
+    } else {
+      // cuerpo: respiración, caminar o bailar
+      const bob = walking ? (Math.sin(t * 12) > 0 ? -1 : 0) : m === 'dance' ? (Math.sin(t * 9) > 0 ? -1 : 0) : 0;
+      const breathe = Math.sin(t * 2.2) > .6 ? .4 : 0;
+      // cola
+      let ta = Math.sin(t * 1.4) * .25;
+      if (walking || m === 'happy' || m === 'celebrate' || m === 'love') ta = -.55 + Math.sin(t * 8) * .3;
+      if (m === 'dance') ta = Math.sin(t * 9) * .8;
+      if (m === 'sad') ta = .5;
+      if (m === 'startle') ta = -.9;
+      const tail = [];
+      for (let k = 0; k <= 1; k += .06) {
+        const ang = -1.25 + ta - k * 1.5;      // empieza a la derecha del cuerpo y sube
+        tail.push([22.5 + Math.cos(ang + 1.25 - ta) * k * 7 + k * k * 2, 29 - k * 9 + Math.sin(ang) * .4 * k]);
+      }
+      fill((x, y) => tail.some(([tx, ty], i) => Math.hypot(x - tx, y - ty) < (i > tail.length - 3 ? 1.5 : 1.35)) ? (y < 22 ? COL.light : COL.body) : null, {dy: bob});
+      fill((x, y) => ell(x, y, 16, 24.6 + breathe * .5, 8.3, 7.4 - breathe * .4) && y < 31 ? (x > 20.5 ? COL.dark : COL.body) : null, {dy: bob});
+      fill((x, y) => ell(x, y, 16, 26.5, 3.8, 3.8) && y < 31 ? COL.light : null, {dy: bob});
+      // patas: alternan al caminar o al escribir
+      const step = walking ? (Math.sin(t * 12) > 0 ? 1 : -1) : m === 'write' ? (Math.sin(t * 18) > 0 ? 1 : -1) : 0;
+      const pawL = m === 'groom' ? null : [12.5, 30 - (step > 0 ? 1 : 0)], pawR = m === 'wave' ? null : [19.5, 30 - (step < 0 ? 1 : 0)];
+      [pawL, pawR].forEach(pw => pw && fill((x, y) => ell(x, y, pw[0], pw[1], 2.6, 1.7) ? COL.light : null, {dy: bob}));
+      // pata levantada: saludar o acicalarse
+      if (m === 'wave') { const wv = Math.sin(t * 10) > 0 ? 1 : 0; fill((x, y) => ell(x, y, 24 + wv, 19 - wv, 2.2, 2.4) ? COL.light : null, {dy: bob}); }
+      if (m === 'groom') fill((x, y) => ell(x, y, 14, 20.5, 2.2, 2.2) ? COL.light : null, {dy: bob});
 
-    // cuerpo: respiración, caminar o bailar
-    const breathe = 1 + Math.sin(t * 2.2) * .012;
-    const bob = walking ? Math.abs(Math.sin(t * 12)) * -2.2 : m === 'dance' ? Math.abs(Math.sin(t * 9)) * -3 : 0;
-    P.body.setAttribute('transform', `translate(0 ${bob.toFixed(2)}) translate(50 93) scale(${(2 - breathe).toFixed(4)} ${breathe.toFixed(4)}) translate(-50 -93)`);
-    const step = walking ? Math.sin(t * 12) * 3 : m === 'write' ? Math.sin(t * 18) * 1.4 : 0;
-    P.pawL.setAttribute('transform', `translate(0 ${Math.min(0, step).toFixed(2)})`);
-    P.pawR.setAttribute('transform', `translate(0 ${Math.min(0, -step).toFixed(2)})`);
-    // pata levantada: saludar o acicalarse
-    const pawUp = m === 'wave' ? `rotate(${(Math.sin(t * 10) * 18).toFixed(1)} 66 66)` : m === 'groom' ? `translate(-15 -8) rotate(-10 68 58)` : null;
-    P.pawUp.style.display = pawUp ? '' : 'none'; if (pawUp) P.pawUp.setAttribute('transform', pawUp);
-    P.pawR.style.opacity = m === 'wave' ? 0 : 1;
-    P.pawL.style.opacity = m === 'groom' ? 0 : 1;
+      // cabeza
+      let a = lx * .06, hx = 0, hy = bob;
+      if (m === 'confused') a = .28;
+      if (m === 'no') a = Math.sin(t * 22) * .22;
+      if (m === 'dizzy') { a = Math.sin(t * 7) * .2; hx = Math.cos(t * 7) > 0 ? 1 : 0; }
+      if (m === 'dance') a = Math.sin(t * 9) * .22;
+      if (m === 'sad') { hy += 1; a = -.1; }
+      if (m === 'write') { hy += 1; a = -.14; }
+      if (m === 'groom') { hy += 1; a = .2; }
+      if (m === 'curious') a = lx * .08 + .14;
+      if (m === 'purr') hx = Math.sin(t * 60) > 0 ? .4 : 0;
+      const T = {a, px: 16, py: 21, dx: hx, dy: hy};
+      const earDown = m === 'sad' || m === 'no' ? 1.5 : 0, earUp = m === 'startle' || m === 'curious' ? 1 : 0;
+      fill((x, y) => tri(x, y, [7.5, 12], [8.5 - earDown * 1.6, 3.5 - earUp + earDown], [13.5, 8.5]) || tri(x, y, [24.5, 12], [23.5 + earDown * 1.6, 3.5 - earUp + earDown], [18.5, 8.5]) ? COL.body : null, T);
+      fill((x, y) => tri(x, y, [9.3, 10], [9.8 - earDown, 6 - earUp + earDown], [12, 8.6]) || tri(x, y, [22.7, 10], [22.2 + earDown, 6 - earUp + earDown], [20, 8.6]) ? COL.inner : null, T);
+      fill((x, y) => ell(x, y, 16, 13.6, 8.8, 6.6) ? (x > 21.5 ? COL.dark : COL.body) : null, T);
+      fill((x, y) => ell(x, y, 16, 16.8, 3.4, 2.1) ? COL.light : null, T);
+      fill((x, y) => y >= 7.8 && y < 9 && x > 13 && x < 19 && x % 3 < 1 ? COL.dark : null, T);   // rayas de gato atigrado
+      // collar perla con cascabel
+      fill((x, y) => ell(x, y, 16, 21.4, 6.6, 1.5) && y > 20.6 ? COL.pearl : null, {dy: bob});
+      dots([[15, 22], [16, 22], [15, 23], [16, 23]], COL.bell, {dy: bob}); dots([[15, 24], [16, 24]], COL.out, {dy: bob});
 
-    // cola
-    let tr = Math.sin(t * 1.4) * 7;
-    if (walking || m === 'happy' || m === 'celebrate' || m === 'love') tr = -18 + Math.sin(t * 8) * 9;
-    if (m === 'dance') tr = Math.sin(t * 9) * 25;
-    if (m === 'sad') tr = 14;
-    if (m === 'startle') tr = -28;
-    P.tail.setAttribute('transform', `rotate(${tr.toFixed(2)} 64 91)`);
-    P.collar.setAttribute('transform', m === 'dance' || walking ? `rotate(${(Math.sin(t * 12) * 3).toFixed(2)} 50 56)` : '');
-    P.sleepHead.setAttribute('transform', `translate(0 ${(Math.sin(t * 1.6) * .6).toFixed(2)})`);
-    if (S.sleeping && now - (S.lastZ || 0) > 1600) { S.lastZ = now; emitFx('z', 1, {dx: -16}); }
+      // ojos
+      const eye = blinking && EYE_FOR[m] === undefined ? 'half' : (EYE_FOR[m] || 'open');
+      const ex = clamp(Math.round(lx), -1, 1), ey = clamp(Math.round(ly), -1, 1);
+      const off = eye === 'open' || eye === 'big' ? [ex, ey] : [0, 0];
+      [[12, 13], [19, 13]].forEach(([cx, cy]) => {
+        EYES[eye].forEach(([x, y, k]) => dots([[cx + x + off[0], cy + y + off[1]]], k === 'p' ? COL.pearl : COL.eye, T));
+      });
+      // nariz y boca
+      dots([[15, 15], [16, 15]], COL.nose, T);
+      if (el.classList.contains('is-talking') || m === 'startle') dots([[15, 17], [16, 17], [15, 18], [16, 18]], COL.eye, T);
+      else dots([[14, 17], [15, 16], [16, 16], [17, 17]], COL.eye, T);
+      if (m === 'groom') dots([[15, 17], [16, 17]], COL.tongue, T);
+      if (m === 'shades') { dots([...Array(12)].map((_, i) => [10 + i, 12]), COL.eye, T); dots([[11, 13], [12, 13], [13, 13], [18, 13], [19, 13], [20, 13], [12, 14], [19, 14]], COL.eye, T); }
+      if (m === 'magnify') {
+        const ring = []; for (let k = 0; k < 24; k++) ring.push([19.5 + Math.cos(k / 24 * 6.283) * 3.4, 13.5 + Math.sin(k / 24 * 6.283) * 3.4]);
+        dots(ring, COL.pearl, T, top); dots([[23, 17], [24, 18], [25, 19]], COL.eye, T, top);
+      }
+      // bigotes (sin contorno)
+      dots([[4, 15], [5, 15], [4, 17], [5, 17], [26, 15], [27, 15], [26, 17], [27, 17]], COL.pearl, T, top);
+    }
 
-    // salto
+    // contorno grueso
+    const data = img.data; data.fill(0);
+    const hex = c => [parseInt(c.slice(1, 3), 16), parseInt(c.slice(3, 5), 16), parseInt(c.slice(5, 7), 16)];
+    const put = (i, c) => { const [r, g, b] = hex(c); data[i * 4] = r; data[i * 4 + 1] = g; data[i * 4 + 2] = b; data[i * 4 + 3] = 255; };
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      const i = y * W + x;
+      if (grid[i]) { put(i, grid[i]); continue; }
+      if ((x > 0 && grid[i - 1]) || (x < W - 1 && grid[i + 1]) || (y > 0 && grid[i - W]) || (y < H - 1 && grid[i + W])) put(i, COL.out);
+    }
+    for (let i = 0; i < W * H; i++) if (top[i]) put(i, top[i]);
+    // sombra en el piso
+    for (let x = 7; x < 29; x++) { const i = (H - 1) * W + x; if (!data[i * 4 + 3]) { data[i * 4 + 3] = 70; } }
+    // efectos
+    S.particles = S.particles.filter(p => (p.age += dt) < p.life);
+    S.particles.forEach(p => {
+      if (p.age < 0) return;
+      p.x += p.vx; p.y += p.vy * (reduce.matches ? 0 : 1);
+      const g = GLYPH[p.kind] || GLYPH.star, c = FXCOL[p.kind] || COL.fx;
+      g.forEach((row, ry) => [...row].forEach((v, rx) => {
+        const x = Math.round(p.x) + rx, y = Math.round(p.y) + ry;
+        if (v === '1' && x >= 0 && y >= 0 && x < W && y < H) put(y * W + x, c);
+      }));
+    });
+    ctx.putImageData(img, 0, 0);
+
+    // salto (en píxeles enteros del sprite)
     let jump = 0;
     if (S.jumps && !reduce.matches) {
       const k = (now - S.jumpStart) / 380;
-      if (k >= S.jumps) S.jumps = 0; else jump = Math.sin((k % 1) * Math.PI) * 16;
+      if (k >= S.jumps) S.jumps = 0; else jump = Math.round(Math.sin((k % 1) * Math.PI) * 5);
     }
-    svg.style.transform = `translateY(${-jump}px)`;
-    P.shadow.setAttribute('transform', `translate(50 96) scale(${(1 - jump / 40).toFixed(3)}) translate(-50 -96)`);
+    canvas.style.transform = `translateY(${(-jump * canvas.clientWidth / W).toFixed(1)}px)`;
   }
 
   // ── Posición
@@ -253,7 +312,8 @@ export function createMascot({root = document.body} = {}) {
     if (dy) { S.scrollDir = Math.sign(dy); S.lastScrollT = performance.now(); }
     activity();
   }, {passive: true});
-  const size = () => narrow.matches ? 62 : 84;
+  const size = () => narrow.matches ? 64 : 88;
+  const tall = w => w * H / W;
 
   function visible(slot) {
     if (!slot) return null;
@@ -269,11 +329,11 @@ export function createMascot({root = document.body} = {}) {
     const mode = slot ? 'slot' : foot ? 'footer' : onCover ? 'hidden' : 'corner';
     const w = mode === 'slot' ? slot.width : mode === 'footer' ? foot.width : size();
     let target;
-    if (mode === 'slot') target = {x: slot.left, y: slot.top, w};
-    else if (mode === 'footer') target = {x: foot.left, y: foot.bottom - w, w};
+    if (mode === 'slot') target = {x: slot.left, y: slot.bottom - tall(w), w};
+    else if (mode === 'footer') target = {x: foot.left, y: foot.bottom - tall(w), w};
     else {
       const bottom = narrow.matches ? 64 + 10 + (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--safe')) || 0) : 14;
-      target = {x: innerWidth - w - (narrow.matches ? 6 : 10), y: innerHeight - bottom - w, w};
+      target = {x: innerWidth - w - (narrow.matches ? 6 : 10), y: innerHeight - bottom - tall(w), w};
       if (mode === 'hidden') target.y = innerHeight + 30;
     }
     if (mode !== S.mode) {
@@ -291,13 +351,13 @@ export function createMascot({root = document.body} = {}) {
   }
 
   function lookAt(x, y) {
-    const r = svg.getBoundingClientRect(); if (!r.width) return;
-    const dx = x - (r.left + r.width / 2), dy = y - (r.top + r.height * .38), d = Math.hypot(dx, dy) || 1;
+    const r = canvas.getBoundingClientRect(); if (!r.width) return;
+    const dx = x - (r.left + r.width / 2), dy = y - (r.top + r.height * .5), d = Math.hypot(dx, dy) || 1;
     S.lookTarget = [dx / d * Math.min(1.6, d / 60), dy / d * Math.min(1.6, d / 60)];
   }
   addEventListener('pointermove', e => {
     lookAt(e.clientX, e.clientY);
-    const r = svg.getBoundingClientRect();
+    const r = canvas.getBoundingClientRect();
     const d = Math.hypot(e.clientX - (r.left + r.width / 2), e.clientY - (r.top + r.height / 2));
     if (d < r.width * .7 && Math.hypot(e.movementX, e.movementY) > 45 && S.mood === 'idle') { setMood('startle', 600); hop(1); }
     activity();

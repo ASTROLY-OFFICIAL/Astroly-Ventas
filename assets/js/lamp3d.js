@@ -1,4 +1,4 @@
-// Producto destacado de la portada: lámpara 3D mate que levita y se desarma como un esquema de piezas.
+// Producto destacado de la portada: lámpara luna 3D que levita, gira y se desarma como un esquema de piezas.
 // Ciclo automático: armada y levitando → se separa en piezas con sus nombres → se vuelve a armar.
 // El botón "Ver piezas" fija la vista desarmada. Con movimiento reducido queda quieta y armada.
 import * as THREE from 'three';
@@ -6,47 +6,75 @@ import * as THREE from 'three';
 const clamp01 = k => Math.min(Math.max(k, 0), 1);
 const smooth = k => { k = clamp01(k); return k * k * (3 - 2 * k); };
 
-// Partes de abajo hacia arriba. y: posición armada; dy: cuánto se separa; side: lado de la etiqueta;
-// anchor: punto (local) al que apunta la línea del esquema.
+// Lámpara luna levitante: esfera con relieve lunar (texturas procedurales en assets/img/luna-*.jpg),
+// luz LED cálida dentro, imán de levitación y base de madera con bobina. Partes de abajo hacia arriba.
+// y: posición armada; dy: cuánto se separa; side: lado de la etiqueta; anchor: punto (local) del esquema;
+// spin: gira como las lámparas luna reales.
+const R = 1.25, MOON_Y = 2.12;
+function woodTexture() {
+  const c = document.createElement('canvas'); c.width = 512; c.height = 128;
+  const g = c.getContext('2d'); g.fillStyle = '#8a5a36'; g.fillRect(0, 0, 512, 128);
+  for (let i = 0; i < 70; i++) {
+    const y = Math.random() * 128, a = Math.random() * 6 + 2, w = Math.random() * 1.6 + .4;
+    g.strokeStyle = `rgba(${Math.random() < .5 ? '60,34,18' : '170,118,74'},${.15 + Math.random() * .3})`; g.lineWidth = w;
+    g.beginPath(); for (let x = 0; x <= 512; x += 8) g.lineTo(x, y + Math.sin(x / 40 + i) * a); g.stroke();
+  }
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = THREE.RepeatWrapping; return t;
+}
 function buildLamp() {
-  const matte = (color, extra = {}) => new THREE.MeshStandardMaterial({color, roughness: .92, metalness: 0, ...extra});
+  const load = (url, srgb) => { const t = new THREE.TextureLoader().load(url); if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t; };
+  const map = load('assets/img/luna-color.jpg', true), bump = load('assets/img/luna-relieve.jpg'), glowMap = load('assets/img/luna-brillo.jpg');
+  const matte = (color, extra = {}) => new THREE.MeshStandardMaterial({color, roughness: .9, metalness: 0, ...extra});
   const M = {
-    pearl: matte(0xf1ede4), inner: matte(0xe6dfd1, {side: THREE.BackSide}), dark: matte(0x1b2233),
-    stem: matte(0xb9b4a8), ember: matte(0xd2461a, {emissive: 0x5a1405, emissiveIntensity: .35}),
-    bulb: new THREE.MeshStandardMaterial({color: 0xfff1de, emissive: 0xffc58a, emissiveIntensity: 1.4, roughness: .6}),
-    glow: new THREE.MeshBasicMaterial({color: 0xffc08a, transparent: true, opacity: .55, depthWrite: false})
+    moon: new THREE.MeshStandardMaterial({map, bumpMap: bump, bumpScale: 3.2, roughness: .96, metalness: 0, emissive: 0xffdcae, emissiveMap: glowMap, emissiveIntensity: .32}),
+    shell: matte(0xfff0d8, {side: THREE.BackSide, emissive: 0xffb877, emissiveIntensity: .9}),
+    cut: matte(0xf3e6cc, {emissive: 0xffc58a, emissiveIntensity: .35, side: THREE.DoubleSide}),
+    wood: matte(0xffffff, {map: woodTexture(), roughness: .78}), woodTop: matte(0x7d5131, {roughness: .8}),
+    dark: matte(0x1d2026, {roughness: .55, metalness: .35}), ember: matte(0xd2461a, {emissive: 0xff5a1f, emissiveIntensity: 1.2}),
+    led: new THREE.MeshStandardMaterial({color: 0xfff4e2, emissive: 0xffd39a, emissiveIntensity: 2.2, roughness: .5}),
+    chip: matte(0xf6c35b, {emissive: 0xffc070, emissiveIntensity: 1.5})
   };
   const parts = [];
-  const add = (name, y, dy, side, anchor, ...meshes) => {
-    const g = new THREE.Group(); meshes.forEach(m => g.add(m)); g.userData = {y, dy, side, anchor: new THREE.Vector3(...anchor), name};
+  const add = (name, y, dy, side, anchor, spin, ...meshes) => {
+    const g = new THREE.Group(); meshes.forEach(m => g.add(m)); g.userData = {y, dy, side, anchor: new THREE.Vector3(...anchor), name, spin};
     g.position.y = y; parts.push(g); return g;
   };
   const mesh = (geo, mat, y = 0) => { const m = new THREE.Mesh(geo, mat); m.position.y = y; return m; };
+  const at = (m, x, y, z) => { m.position.set(x, y, z); return m; };
+  const hemi = top => {
+    const geo = new THREE.SphereGeometry(R, 128, 48, 0, Math.PI * 2, top ? 0 : Math.PI / 2, Math.PI / 2);
+    const uv = geo.attributes.uv; for (let i = 0; i < uv.count; i++) uv.setY(i, top ? .5 + .5 * uv.getY(i) : .5 * uv.getY(i));
+    const inner = new THREE.SphereGeometry(R * .93, 64, 24, 0, Math.PI * 2, top ? 0 : Math.PI / 2, Math.PI / 2);
+    const ring = new THREE.RingGeometry(R * .93, R, 128); ring.rotateX(top ? Math.PI / 2 : -Math.PI / 2);
+    return [mesh(geo, M.moon), mesh(inner, M.shell), mesh(ring, M.cut)];
+  };
 
-  // Base pesada con aro naranja brasa.
-  add('base', 0, -.55, 'right', [1.02, .16, 0],
-    mesh(new THREE.CylinderGeometry(1.0, 1.12, .28, 72), M.dark, .14),
-    mesh(new THREE.TorusGeometry(.98, .035, 12, 96), M.ember, .285).rotateX(Math.PI / 2));
-  // Varilla.
-  add('stem', .28, 0, 'left', [-.05, 1.0, 0], mesh(new THREE.CylinderGeometry(.055, .055, 2.0, 24), M.stem, 1.0));
-  // Rótula.
-  add('joint', 2.28, .38, 'right', [.12, 0, 0], mesh(new THREE.SphereGeometry(.12, 32, 16), M.dark),
-    mesh(new THREE.CylinderGeometry(.16, .16, .08, 32), M.dark, .1));
-  // Bombillo.
-  add('bulb', 2.55, .82, 'left', [-.3, 0, 0], mesh(new THREE.SphereGeometry(.3, 40, 24), M.bulb),
-    mesh(new THREE.CylinderGeometry(.11, .11, .18, 24), M.stem, -.32));
-  // Pantalla en cúpula (torno), con difusor cálido en el borde.
-  const prof = [];
-  for (let i = 0; i <= 24; i++) { const a = (i / 24) * Math.PI / 2; prof.push(new THREE.Vector2(Math.cos(a) * 1.38 + .02, Math.sin(a) * .98)); }
-  prof.reverse();
-  const dome = new THREE.LatheGeometry(prof, 96);
-  add('shade', 2.32, 1.42, 'right', [1.05, .5, 0],
-    mesh(dome, M.pearl), mesh(dome, M.inner),
-    mesh(new THREE.TorusGeometry(1.39, .045, 12, 120), M.pearl).rotateX(Math.PI / 2),
-    mesh(new THREE.CircleGeometry(1.3, 64), M.glow, .01).rotateX(Math.PI / 2));
-  return {parts, M};
+  // Base de madera con bobina y botón táctil naranja brasa.
+  add('base', 0, -.7, 'right', [1.2, .16, 0], false,
+    mesh(new THREE.CylinderGeometry(1.25, 1.32, .34, 96), [M.wood, M.woodTop, M.woodTop], .17),
+    mesh(new THREE.CylinderGeometry(.5, .5, .02, 64), M.dark, .345),
+    mesh(new THREE.TorusGeometry(.5, .018, 8, 64), M.ember, .35).rotateX(Math.PI / 2),
+    at(mesh(new THREE.CircleGeometry(.05, 24), M.ember), 0, .2, 1.305));
+  // Imán de levitación (dentro del polo inferior).
+  add('magnet', MOON_Y - R * .86, -.62, 'left', [-.34, 0, 0], true,
+    mesh(new THREE.CylinderGeometry(.34, .34, .12, 48), M.dark), mesh(new THREE.CylinderGeometry(.18, .18, .13, 32), M.chip));
+  // Media esfera inferior.
+  add('bottom', MOON_Y, 0, 'right', [R * .98, -.25, 0], true, ...hemi(false));
+  // Luz LED cálida (placa con chips).
+  const led = add('led', MOON_Y, .62, 'left', [-.42, 0, 0], true,
+    mesh(new THREE.CylinderGeometry(.42, .42, .09, 48), M.led),
+    ...[0, 1, 2, 3, 4, 5].map(i => at(mesh(new THREE.BoxGeometry(.09, .03, .09), M.chip), Math.cos(i) * .26, .045, Math.sin(i) * .26)));
+  // Media esfera superior.
+  add('top', MOON_Y, 1.38, 'right', [R * .9, .45, 0], true, ...hemi(true));
+  return {parts, M, led};
 }
 
+function haloTexture() {
+  const c = document.createElement('canvas'); c.width = c.height = 128;
+  const g = c.getContext('2d'), r = g.createRadialGradient(64, 64, 18, 64, 64, 64);
+  r.addColorStop(0, 'rgba(255,200,140,.55)'); r.addColorStop(.45, 'rgba(255,170,100,.16)'); r.addColorStop(1, 'rgba(255,160,90,0)');
+  g.fillStyle = r; g.fillRect(0, 0, 128, 128); return new THREE.CanvasTexture(c);
+}
 function shadowTexture() {
   const c = document.createElement('canvas'); c.width = c.height = 128;
   const g = c.getContext('2d'), r = g.createRadialGradient(64, 64, 4, 64, 64, 62);
@@ -69,15 +97,18 @@ export function mountLamp(stage, {labels = [], button, onExplode} = {}) {
   scene.add(new THREE.HemisphereLight(0xe8eeff, 0x0f2d5e, 1.25));
   const key = new THREE.DirectionalLight(0xfff6ea, 2.2); key.position.set(-4, 7, 6); scene.add(key);
   const rim = new THREE.DirectionalLight(0x9fb8ff, 1.1); rim.position.set(5, 3, -4); scene.add(rim);
-  const warm = new THREE.PointLight(0xffb070, 3, 6, 1.6); scene.add(warm);
+  const warm = new THREE.PointLight(0xffb070, 3, 7, 1.4); scene.add(warm);
+  const halo = new THREE.Sprite(new THREE.SpriteMaterial({map: haloTexture(), color: 0xffc58a, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending}));
+  halo.scale.setScalar(5.2); scene.add(halo);
 
   const lamp = new THREE.Group(); scene.add(lamp);
   const {parts, M} = buildLamp(); parts.forEach(p => lamp.add(p));
+  parts.sort((a, b) => a.userData.y + a.userData.dy - (b.userData.y + b.userData.dy)); // de abajo hacia arriba ya explotado
   const shadow = new THREE.Mesh(new THREE.PlaneGeometry(3.6, 3.6), new THREE.MeshBasicMaterial({map: shadowTexture(), transparent: true, depthWrite: false}));
   shadow.rotation.x = -Math.PI / 2; scene.add(shadow);
 
   const svg = stage.querySelector('.lamp-callouts');
-  const order = ['shade', 'bulb', 'joint', 'stem', 'base'];
+  const order = ['top', 'led', 'bottom', 'magnet', 'base'];
   const NS = 'http://www.w3.org/2000/svg';
   const marks = order.map((name, i) => {
     const g = document.createElementNS(NS, 'g'); g.setAttribute('class', 'callout');
@@ -122,20 +153,24 @@ export function mountLamp(stage, {labels = [], button, onExplode} = {}) {
     const e = S.explode;
     if ((e > .5) !== wasOpen) { wasOpen = e > .5; if (!S.manual) onExplode?.(wasOpen); }
 
-    // Levitación (más suave cuando está desarmada).
-    const float = reduce.matches ? .2 : .2 + Math.sin(t * 1.7) * .11 * (1 - e * .6);
-    parts.forEach(p => { p.position.y = p.userData.y + p.userData.dy * e; });
-    lamp.position.y = float;
+    // Levitación: la luna flota y gira sobre la base; la base queda quieta.
+    const float = reduce.matches ? 0 : Math.sin(t * 1.5) * .09 * (1 - e * .6);
+    const spin = reduce.matches ? .6 : t * .3;
+    parts.forEach(p => {
+      p.position.y = p.userData.y + p.userData.dy * e + (p.userData.spin ? float : 0);
+      if (p.userData.spin) p.rotation.y = spin;
+    });
     S.yaw += (S.yawT - S.yaw) * Math.min(1, dt * 4);
-    lamp.rotation.y = (reduce.matches ? 0 : Math.sin(t * .42) * .35) + S.yaw - .25 * e;
-    lamp.rotation.z = reduce.matches ? 0 : Math.sin(t * 1.1) * .02;
-    const shadeY = lamp.position.y + parts[4].position.y + .2;
-    warm.position.set(0, shadeY, .2); warm.intensity = 2.4 + Math.sin(t * 2.3) * .25;
-    shadow.position.y = -.62; const sc = 1.05 - (float - .2) * .9 + e * .05; shadow.scale.set(sc, sc, 1);
-    shadow.material.opacity = .9 - (float - .2) * 1.4;
+    lamp.rotation.y = S.yaw - .2 * e;
+    const ledY = parts[3].position.y;
+    warm.position.set(0, ledY + .1, 0); warm.intensity = (2.2 + Math.sin(t * 2.1) * .2) * (1 + e * .4);
+    const glow = .32 + Math.sin(t * 2.1) * .035;
+    M.moon.emissiveIntensity = glow;
+    halo.position.set(0, MOON_Y + float, -.6); halo.material.opacity = .85 - e * .35;
+    shadow.position.y = .005; shadow.scale.set(1.05, 1.05, 1); shadow.material.opacity = .8;
 
     // Cámara: se aleja un poco al desarmar para que entren todas las piezas.
-    const span = 3.95 + e * (camera.aspect < 1 ? 3.2 : 2.1), mid = 1.78 + e * .4;
+    const span = 4.0 + e * (camera.aspect < 1 ? 3.0 : 2.0), mid = 1.72 + e * .35;
     const dist = (span / 2) / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * Math.max(1, .82 / camera.aspect) + .6;
     camera.position.set(0, mid + 1.1, dist); camera.lookAt(0, mid, 0);
     renderer.render(scene, camera);

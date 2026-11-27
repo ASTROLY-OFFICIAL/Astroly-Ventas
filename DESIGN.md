@@ -8,12 +8,13 @@ Lo que renderiza hoy `assets/css/tienda.css`. Si cambias una decisión, actualiz
 | --- | --- | --- |
 | `--sapphire` | `#0f2d5e` zafiro profundo | Lienzo, portada, cuerpo de las tarjetas (60 %) |
 | `--sapphire-hi` / `-lo` / `-deep` | `#183d78` / `#0a2148` / `#071a3a` | Degradados, texto sobre perla, tema noche |
-| `--pearl` | `#f3f0e8` blanco perla | Texto sobre zafiro, barra lateral, pie, barra del destacado (30 %) |
+| `--pearl` | `#f3f0e8` blanco perla | Texto sobre zafiro, logo del menú, pie, panel del destacado, collar del gato (30 %) |
+| `--page` / `--menu` | `#0a2149` / zafiro | Fondo de página un tono más oscuro que el menú para que la barra se distinga (noche: `#061530` / `#0d2a58`) |
 | `--pearl-hi` / `-lo` | `#f8f6f1` / `#e1dccf` | Fondo de las imágenes de producto / rellenos suaves |
-| `--ember` | `#d2461a` naranja brasa | Acentos (10 %): botones de portada y pago, ítem activo, contador, chips activos, insignias, estrellas, aro de la lámpara, collar del gato |
+| `--ember` | `#d2461a` naranja brasa | Acentos (10 %): botones de portada y pago, ítem activo, contador, chips activos, insignias, estrellas, aro de la lámpara, cuerpo del gato |
 | `--ember-hi` | `#ff7a45` | Naranja para líneas, foco y detalles finos sobre zafiro (contraste) |
 
-Sobre naranja brasa el texto va en blanco. `.band` pone una zona en perla con texto zafiro (barra lateral y pie).
+Sobre naranja brasa el texto va en blanco. `.band` pone una zona en perla con texto zafiro (el pie). La barra lateral va en `--menu` con el logo en perla.
 Tema "noche" (`data-theme="dark"`, en `localStorage astroly-theme`): el lienzo pasa a `--sapphire-deep`.
 
 Los tonos de producto (Blanco, Grafito, Perla, Hueso) y las ilustraciones de `art.js` representan el producto, no la
@@ -35,8 +36,11 @@ interfaz: no se pintan con la paleta.
 
 Tarjeta zafiro con título a la izquierda y la lámpara 3D mate (three.js, `lamp3d.js`) a la derecha. El lienzo 3D
 sobresale por encima de la tarjeta (`--pop`). Esquema de piezas en SVG: puntos naranja, líneas y textos en Geist Mono.
+La lámpara es una luna: texturas propias de color, relieve y brillo (`assets/img/luna-*.jpg`), base de madera con aro
+naranja, halo cálido. Debajo, panel perla con recuadro desplazado y tarjetas zafiro con números que suben.
 
 ## Mascota
 
-Gato de casa en vector (`mascota.js`): cuerpo blanco perla con contorno zafiro, orejas por dentro rosa brasa, nariz y
-collar naranja brasa, cascabel dorado. Efectos (corazones, notas, estrellas) en naranja claro.
+Gato de casa en 8 bits (`mascota.js`): lienzo de 36×40 escalado con `image-rendering: pixelated`, cuerpo naranja
+brasa con sombra a la derecha, panza y patas en naranja claro, contorno grueso zafiro, collar blanco perla con
+cascabel dorado. Efectos en glifos de píxel (corazones, notas, estrellas, monedas en naranja; z, ? y ! en perla).

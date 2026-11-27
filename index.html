@@ -23,13 +23,21 @@
     </div>
     <div class="hero-feature" data-feature>
       <div class="lamp-stage" aria-hidden="true"><svg class="lamp-callouts"></svg></div>
-      <div class="feature-bar">
-        <a class="feature-name" data-feature-link><span class="label">Destacado</span><strong data-feature-name></strong></a>
-        <span class="feature-price" data-feature-price></span>
-        <span class="feature-stats"><span class="feature-rating"><span class="stars" data-stars></span><span class="mono" data-rating></span></span>
-        <span class="feature-sold mono" data-sold></span></span>
-        <button type="button" class="feature-parts" data-explode aria-pressed="false">Ver piezas</button>
-        <button type="button" class="button small accent" data-feature-add>Agregar</button>
+      <div class="feature-card">
+        <div class="feature-head">
+          <a class="feature-name" data-feature-link><span class="label">Destacado</span><strong data-feature-name></strong></a>
+          <span class="feature-price" data-feature-price></span>
+          <button type="button" class="feature-parts" data-explode aria-pressed="false">Ver piezas</button>
+          <button type="button" class="button small accent" data-feature-add>Agregar</button>
+        </div>
+        <dl class="feature-stats">
+          <div class="stat stat-rating"><dt>Calificación</dt><dd><span class="stat-num mono" data-count="rating">0</span><small>/5</small></dd>
+            <span class="stars" data-stars></span></div>
+          <div class="stat"><dt>Vendidas</dt><dd><span class="stat-num mono" data-count="sold">0</span><small>und.</small></dd>
+            <span class="stat-bar"><i data-bar="sold"></i></span></div>
+          <div class="stat"><dt>Reseñas</dt><dd><span class="stat-num mono" data-count="reviews">0</span></dd>
+            <span class="stat-bar"><i data-bar="reviews"></i></span></div>
+        </dl>
       </div>
     </div>
   </section>

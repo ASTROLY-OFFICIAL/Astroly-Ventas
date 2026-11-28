@@ -4,28 +4,28 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>astroly · Tienda en línea</title>
-<meta name="description" content="Tienda en línea de astroly: decoración para el hogar con pago en línea y precios en pesos o dólares.">
+<meta name="description" content="astroly: tienda en línea con productos elegidos uno a uno, pago en línea y precios en pesos o dólares.">
 <link rel="icon" href="assets/img/isotipo.svg" type="image/svg+xml">
 <script>document.documentElement.dataset.theme=localStorage.getItem('astroly-theme')||'light'</script>
 <link rel="stylesheet" href="assets/css/tienda.css">
-<script type="importmap">{"imports":{"three":"./assets/vendor/three.module.js"}}</script>
 </head>
 <body data-page="home">
 <a class="skip" href="#catalogo">Saltar al catálogo</a>
 <main class="main">
-  <!-- Portada compacta: título a la izquierda, redes a la derecha con la mascota encima -->
+  <!-- Portada compacta: título general a la izquierda y la escena 8 bits de Astro a la derecha -->
   <section class="hero" id="inicio" aria-labelledby="hero-title">
     <div class="hero-copy">
-      <span class="pill">Hogar y decoración</span>
-      <h1 id="hero-title">Objetos que cambian tu espacio</h1>
-      <p>Decoración elegida una a una. Pago en línea, en pesos o dólares.</p>
+      <span class="pill">astroly · tienda en línea</span>
+      <h1 id="hero-title">Encuentra lo que buscas</h1>
+      <p>Productos elegidos uno a uno para tu casa, tu escritorio y tu día a día. Pago en línea, en pesos o dólares.</p>
       <div class="hero-actions"><a class="button" href="#catalogo">Ver catálogo</a><a class="text-link" href="#novedades">Novedades</a></div>
     </div>
-    <div class="hero-side">
-      <div class="hero-slot" data-mascot-slot="hero"></div>
-      <aside class="social-card glass" aria-label="Redes sociales">
-        <span class="label">Síguenos · astroly ventas</span>
-        <ul id="social-list"></ul>
+    <div class="hero-scene" data-mascot-scene>
+      <aside class="promo" data-promo aria-live="polite">
+        <span class="promo-label mono" data-promo-label></span>
+        <strong class="promo-name" data-promo-name></strong>
+        <span class="promo-offer" data-promo-offer hidden></span>
+        <div class="promo-row"><span data-promo-price></span><a class="button small" data-promo-link href="#">Ver</a><button type="button" class="link-btn" data-promo-add>Agregar</button></div>
       </aside>
     </div>
   </section>
@@ -41,6 +41,7 @@
 
   <!-- Catálogo -->
   <section class="catalog" id="catalogo" aria-labelledby="catalog-title">
+    <div class="catalog-bar">
     <div class="section-head">
       <h2 id="catalog-title">Catálogo <span class="results mono" aria-live="polite"></span></h2>
       <div class="catalog-tools">
@@ -52,6 +53,7 @@
       <div class="chips" role="group" aria-label="Categoría" data-filter="col"></div>
       <div class="chips" role="group" aria-label="Precio" data-filter="price"></div>
       <div class="chips tones-filter" role="group" aria-label="Tono" data-filter="tone"></div>
+    </div>
     </div>
     <div class="grid"></div>
     <div class="catalog-empty" hidden><p>No hay productos con esos filtros.</p><button type="button" class="text-link" data-reset>Quitar filtros</button></div>

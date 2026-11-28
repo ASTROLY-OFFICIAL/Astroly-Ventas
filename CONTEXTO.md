@@ -21,20 +21,24 @@ a eso. Mercado: Colombia, en español, precios en COP o USD a elección del clie
 ## Decisiones vigentes
 
 - **Sistema de diseño de la v2** (decidido por Santiago el 2026-11-27 tras probar otras paletas): lienzo gris
-  `#979797` (negro en tema noche), texto negro, bandas invertidas, vidrio, tarjetas de producto blancas y bordes
-  redondeados (tarjetas de 20 px, botones en píldora). Detalle en `DESIGN.md`. Las paletas marfil/negro/turquesa y
-  zafiro/perla/brasa, la lámpara luna 3D y el gato se descartaron; están en el historial de git si se quieren retomar.
+  `#979797` (negro en tema noche), texto negro, bandas invertidas, vidrio y tarjetas de producto blancas. Desde el
+  2026-11-28 con esquinas menos curvas (tarjetas de 8 px, botones y chips de 6–8 px) y densidad de tienda grande tipo
+  Temu o AliExpress: 6 columnas en escritorio y 2 en celular, tarjetas juntas, nombre en dos líneas, precio
+  destacado, barra de búsqueda y filtros fija al bajar y carga continua al llegar al final. Detalle en `DESIGN.md`.
+  Las paletas marfil/negro/turquesa y zafiro/perla/brasa, la lámpara luna 3D y el gato se descartaron; están en el
+  historial de git si se quieren retomar.
 - **Catálogo primero:** textos cortos y títulos pequeños; sin palabras gigantes de fondo. Del kit de Astroly se
   usan tipografías (Urbanist, Geist Mono), color monocromo y efectos (vidrio, movimiento); no su composición de landing.
 - **Navegación:** barra lateral (abajo en celular) con Inicio, Categoría (buscador), Tú (cuenta) y Carrito.
-- **Portada compacta:** título a la izquierda y la tarjeta de redes a la derecha con la mascota sentada encima. En la
-  primera visita el isotipo 3D (`hero3d.js`) gira y se convierte en la mascota.
+- **Portada compacta y general:** título "Encuentra lo que buscas" (no encierra la tienda en un nicho) y, a la derecha,
+  una escena en 8 bits (`assets/js/escena.js`): Astro busca en tres cajas, en la tercera encuentra una lámpara que se
+  enciende y se despliega la promoción (`CONFIG.promo` en `data.js`: producto, etiqueta y oferta opcional; no se
+  inventan descuentos). Ya no hay tarjeta de redes ni intro 3D del isotipo; las redes están en el pie.
 - **Mascota: Astro, una estrellita de 8 bits** (elegida por Santiago entre estrellita, cubito y gotita), en
-  `assets/js/mascota.js`. Reemplaza a la araña. Blanca con contorno negro grueso; sus puntas son cabeza, brazos y
-  piernas. Al bajar cuelga de un hilo a la derecha como un adorno y se desliza por él con el scroll; se baja en la
-  portada y en el pie. Reacciona a lo que hace el cliente (agregar, favoritos, filtros, búsqueda, formulario, tema,
-  moneda, pago), sigue el cursor con la mirada, a los 14 s sin actividad une estrellas en una constelación y a los
-  30 s se duerme.
+  `assets/js/mascota.js`. Totalmente negra con ojos blancos; sus puntas son cabeza, brazos y piernas. No sale mientras
+  se ve la escena de la portada. Al bajar flota a la derecha; al hacer scroll se vuelve estrella fugaz con estela de
+  escarcha: con paracaídas si bajas y con jetpack si subes. Se sienta sobre el pie y en el carrito vacío. Reacciona a
+  lo que hace el cliente, sigue el cursor con la mirada, a los 14 s sin actividad une estrellas y a los 30 s se duerme.
 - Móvil según las reglas compactas de Astroly: portada en una pantalla, cuadrícula de 2 columnas, chips con scroll
   horizontal, un solo elemento flotante, márgenes de 16 px.
 
@@ -46,6 +50,10 @@ a eso. Mercado: Colombia, en español, precios en COP o USD a elección del clie
 
 ## Registro de sesiones
 
+- **2026-11-28 · Santiago · rama `diseno-v2` (2.ª tanda):** catálogo más denso tipo marketplace y esquinas menos
+  curvas; Astro pasa a negra con ojos blancos, sin hilo: escarcha, paracaídas al bajar y jetpack al subir; portada
+  compacta con título general y escena 8 bits de las cajas con la promoción. Se retiraron `hero3d.js` y three.js.
+  El tema de Shopify del socio (1.1.0, zafiro) todavía no tiene estos cambios.
 - **2026-11-28 · Santiago · rama `diseno-v2`:** vuelta al sistema de diseño de la v2 (gris/negro, vidrio, bordes
   redondeados, portada con tarjeta de redes e intro del isotipo). La mascota pasa a ser Astro, una estrellita de
   8 bits que cuelga de su hilo. Se quitaron la lámpara luna, el panel de cifras y el gato.

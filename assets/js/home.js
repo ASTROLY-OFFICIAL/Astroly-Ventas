@@ -1,20 +1,26 @@
-// Inicio: portada compacta, novedades y catálogo con filtros.
-import {shell, $, $$, ICON, card, bindCards, reduce, store, COLLECTIONS, CONFIG, TONE_NAMES, esc, norm} from './ui.js';
+// Inicio: portada compacta con la escena de Astro, novedades y catálogo con filtros (carga más al llegar al final).
+import {shell, $, $$, ICON, card, bindCards, reduce, store, COLLECTIONS, CONFIG, TONE_NAMES, norm, flyToCart, artSVG} from './ui.js';
 import {PRODUCTS} from './data.js';
 
 const mascot = shell();
 
-// ── Redes
-$('#social-list').innerHTML = CONFIG.socials.map(s => `<li><a href="${s.url}" class="social-row"><span class="social-icon">${ICON[s.key]}</span><span class="social-name">${s.name}</span><span class="social-handle mono">${esc(s.handle)}</span></a></li>`).join('');
 $('.search-icon').innerHTML = ICON.search;
 
-// ── Intro: el isotipo 3D gira sobre la tarjeta de redes y se vuelve la mascota (primera visita).
-if (!reduce.matches && !sessionStorage.getItem('astroly-intro') && scrollY < 50) {
-  sessionStorage.setItem('astroly-intro', '1');
-  mascot.prepare();
-  import('./hero3d.js').then(({playIntro}) => playIntro($('.hero-slot'), {onSettle: () => mascot.assemble()}))
-    .catch(() => mascot.assemble());
-} else setTimeout(() => mascot.react('greet', {text: 'Hola de nuevo. ¿Qué buscamos hoy?'}), 600);
+// ── Portada: Astro busca entre cajas, encuentra el producto de la promoción y esta se despliega.
+const P = CONFIG.promo, pp = PRODUCTS.find(p => p.id === P.id), promo = $('[data-promo]');
+if (pp) {
+  $('[data-promo-label]').textContent = P.label;
+  $('[data-promo-name]').textContent = pp.name;
+  $('[data-promo-price]').innerHTML = store.priceTag(pp.price);
+  $('[data-promo-link]').href = `producto.html?id=${pp.id}`;
+  const offer = $('[data-promo-offer]'); offer.textContent = P.offer; offer.hidden = !P.offer;
+  $('[data-promo-add]').addEventListener('click', () => flyToCart($('[data-promo-name]'), artSVG(pp.art, pp.tones[0])).then(() => store.add(pp.id, pp.tones[0], 1)));
+}
+import('./escena.js').then(({mountScene}) => mountScene($('.hero-scene'), {
+  onFound: () => { if (pp) { promo.classList.remove('is-open'); void promo.offsetWidth; promo.classList.add('is-open'); } },
+  onReset: () => promo.classList.remove('is-open')
+})).catch(() => promo.classList.add('is-open'));
+if (!pp) promo.remove();
 
 // ── Novedades
 const track = $('.row-track');
@@ -53,7 +59,7 @@ input.addEventListener('input', () => { STATE.q = input.value; STATE.shown = 15;
 sort.addEventListener('change', () => { STATE.sort = sort.value; render(); });
 $('[data-reset]').addEventListener('click', () => { Object.assign(STATE, {col: 'todo', price: 'all', tone: 'all', q: ''}); input.value = ''; drawChips(); render(); });
 
-function render() {
+function render(fresh = true) {
   const priceTest = PRICES.find(p => p.key === STATE.price)?.test || (() => true);
   let list = PRODUCTS.filter(p => (STATE.col === 'todo' || p.col === STATE.col) && priceTest(p) && (STATE.tone === 'all' || p.tones.includes(STATE.tone))
     && (!STATE.q || norm(p.name + ' ' + p.short).includes(norm(STATE.q))));
@@ -66,9 +72,13 @@ function render() {
   results.textContent = `${total} ${total === 1 ? 'producto' : 'productos'}`;
   empty.hidden = total > 0;
   if (!total && STATE.q) mascot.react('noresults');
-  grid.classList.remove('is-fresh'); void grid.offsetWidth; grid.classList.add('is-fresh');
+  if (fresh) { grid.classList.remove('is-fresh'); void grid.offsetWidth; grid.classList.add('is-fresh'); }
+  moreIO.disconnect(); const m = $('[data-more]', grid); if (m) moreIO.observe(m);
 }
-grid.addEventListener('click', e => { if (e.target.closest('[data-more]')) { STATE.shown += 15; render(); } });
+grid.addEventListener('click', e => { if (e.target.closest('[data-more]')) more(); });
+// Carga continua, como en las tiendas grandes: al acercarse al final se agregan más productos sin recargar.
+function more() { const y = scrollY; STATE.shown += 15; render(false); scrollTo(0, y); }
+const moreIO = new IntersectionObserver(es => es.forEach(e => e.isIntersecting && more()), {rootMargin: '0px 0px 400px 0px'});
 bindCards(grid);
 drawChips(); render();
 if (params.has('cat') || params.has('q') || location.hash === '#catalogo') requestAnimationFrame(() => $('#catalogo').scrollIntoView());

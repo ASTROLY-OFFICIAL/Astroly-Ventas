@@ -6,6 +6,9 @@ export const CONFIG = {
   store: 'astroly',
   usdRate: 4000,            // 1 USD = 4.000 COP (solo para la vista previa; Shopify Markets lo calcula de verdad)
   defaultCurrency: 'COP',
+  // Promoción que se despliega en la portada cuando Astro encuentra el producto. Sin descuentos inventados:
+  // si hay una oferta real, ponla en "offer" (por ejemplo "10 % de descuento hasta el domingo").
+  promo: {id: 'lampara-halo', label: 'Hallazgo de la semana', offer: ''},
   socials: [
     {key: 'instagram', name: 'Instagram', handle: '@astroly.ventas', url: '#'},
     {key: 'tiktok', name: 'TikTok', handle: '@astroly.ventas', url: '#'},

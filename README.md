@@ -2,7 +2,7 @@
 
 Prototipo navegable de la tienda: **inicio y catálogo en un solo recorrido**, ficha de producto y carrito.
 Usa el kit de diseño de Astroly (Urbanist y Geist Mono, lienzo gris o negro, bandas invertidas, palabras
-gigantes, vidrio, tarjetas blancas, isotipo 3D y entradas palabra por palabra) y Astro, la estrellita de 8 bits.
+gigantes, vidrio y tarjetas blancas) y Astro, la estrellita de 8 bits.
 
 ## Cómo verla
 
@@ -20,7 +20,7 @@ Abre http://127.0.0.1:4180. (Con doble clic sobre `index.html` no carga: los mó
 - Barra lateral en todas las páginas (abajo en celular): **Inicio**, **Categoría** (buscador con resultados en vivo
   y lista de categorías), **Tú** (cuenta) y **Carrito** (abre el panel; también se le pueden arrastrar productos).
   Moneda COP/USD y tema claro/oscuro al pie de la barra (arriba en celular).
-- `index.html`: portada compacta (título a la izquierda, redes a la derecha con la mascota encima), fila de novedades
+- `index.html`: portada compacta (título general a la izquierda, escena 8 bits de Astro y promoción a la derecha), fila de novedades
   y catálogo con búsqueda, filtros por categoría, precio y tono, y orden.
 - `producto.html?id=…`: vistas Frente / Detalle / De noche, tonos, cantidad, favoritos y relacionados.
 - `cuenta.html`: el cliente diligencia sus datos (personales y dirección de envío en Colombia), ve sus favoritos y sus pedidos.
@@ -31,20 +31,19 @@ la composición es de tienda, con textos cortos para que la atención quede en l
 
 ## La mascota
 
-Es **Astro**, una estrellita de 8 bits: sus puntas son la cabeza, los brazos y las piernas. Código en `assets/js/mascota.js`.
+Es **Astro**, una estrellita de 8 bits negra con ojos blancos: sus puntas son la cabeza, los brazos y las piernas.
+Código en `assets/js/mascota.js`; la escena de la portada está en `assets/js/escena.js`.
 
-- Primera visita: el isotipo 3D gira sobre la tarjeta de redes y se vuelve la estrellita, que saluda según la hora.
-- Al bajar, cuelga de un hilo a la derecha, como un adorno. Mientras haces scroll se desliza por el hilo (agarrada con los brazos)
-  y cuando paras se queda a esa altura. Solo se baja del hilo en la portada o en el pie de página.
+- Portada: Astro busca entre cajas; en la tercera encuentra una lámpara y se despliega la promoción (`CONFIG.promo`).
+- Al bajar flota a la derecha. Con el scroll se vuelve estrella fugaz: paracaídas al bajar, jetpack al subir, con
+  estela de escarcha. En el pie se sienta sobre el borde; con el carrito vacío baja grande al centro.
 - Catálogo: celebra al agregar, se pone triste al quitar, ojos de corazón con favoritos, cambia de tono con brillo,
   mira con curiosidad el producto bajo el cursor, lee mientras buscas y se confunde sin resultados.
-- Producto: lupa en la vista Detalle, se adormece en la vista De noche, cuenta monedas al subir la cantidad.
-- Cuenta: "escribe" mientras llenas el formulario, te saluda por tu nombre, niega con la cabeza si falta un dato y
-  celebra al guardar.
-- Carrito y pago: baila al pagar; con el carrito vacío baja grande al centro.
-- Tema claro: lentes de sol; oscuro: se adormece. Moneda: se marea con monedas. Tocarla: saluda; muchos toques: se marea.
-- 14 s sin actividad: une estrellas en una constelación. 30 s: se duerme con Z. Cualquier acción la despierta de un susto.
-- Prueba en la consola del navegador: `astrolyMascot.idle(31)` (dormir) o `astrolyMascot.react('add')`.
+- Producto: lupa en la vista Detalle, se adormece en la vista De noche. Cuenta: "escribe" mientras llenas el
+  formulario, te saluda por tu nombre y niega si falta un dato. Pago: baila.
+- Tema claro: lentes de sol. Moneda: se marea con monedas. Tocarla: saluda; muchos toques: se marea.
+- 14 s sin actividad: une estrellas en una constelación. 30 s: se duerme. Cualquier acción la despierta.
+- Consola: `astrolyMascot.fly(1)` (paracaídas), `astrolyMascot.fly(-1)` (jetpack), `astrolyMascot.idle(31)` (dormir).
 
 ## Lo que reemplaza tu socio
 
@@ -71,5 +70,5 @@ La cuenta de Shopify ya existe; el siguiente paso es convertir esto en un tema (
 
 - `assets/css/tienda.css`: todo el estilo (tokens del kit, temas, móvil compacto, movimiento reducido).
 - `assets/js/`: `ui.js` (piezas compartidas), `home.js`, `producto.js`, `carrito.js`, `cuenta.js`, `store.js`, `data.js`,
-  `art.js`, `mascota.js`, `hero3d.js`.
-- `assets/vendor/`: three.js (licencia MIT). `assets/fonts/`: Urbanist y Geist Mono. `assets/img/`: isotipos.
+  `art.js`, `mascota.js`, `escena.js`.
+- `assets/fonts/`: Urbanist y Geist Mono. `assets/img/`: isotipos.

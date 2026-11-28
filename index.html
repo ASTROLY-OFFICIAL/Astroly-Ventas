@@ -13,32 +13,20 @@
 <body data-page="home">
 <a class="skip" href="#catalogo">Saltar al catálogo</a>
 <main class="main">
-  <!-- Portada: título a la izquierda y el producto destacado en 3D a la derecha -->
+  <!-- Portada compacta: título a la izquierda, redes a la derecha con la mascota encima -->
   <section class="hero" id="inicio" aria-labelledby="hero-title">
     <div class="hero-copy">
       <span class="pill">Hogar y decoración</span>
       <h1 id="hero-title">Objetos que cambian tu espacio</h1>
       <p>Decoración elegida una a una. Pago en línea, en pesos o dólares.</p>
-      <div class="hero-actions"><a class="button accent" href="#catalogo">Ver catálogo</a><a class="text-link" href="#novedades">Novedades</a></div>
+      <div class="hero-actions"><a class="button" href="#catalogo">Ver catálogo</a><a class="text-link" href="#novedades">Novedades</a></div>
     </div>
-    <div class="hero-feature" data-feature>
-      <div class="lamp-stage" aria-hidden="true"><svg class="lamp-callouts"></svg></div>
-      <div class="feature-card">
-        <div class="feature-head">
-          <a class="feature-name" data-feature-link><span class="label">Destacado</span><strong data-feature-name></strong></a>
-          <span class="feature-price" data-feature-price></span>
-          <button type="button" class="feature-parts" data-explode aria-pressed="false">Ver piezas</button>
-          <button type="button" class="button small accent" data-feature-add>Agregar</button>
-        </div>
-        <dl class="feature-stats">
-          <div class="stat stat-rating"><dt>Calificación</dt><dd><span class="stat-num mono" data-count="rating">0</span><small>/5</small></dd>
-            <span class="stars" data-stars></span></div>
-          <div class="stat"><dt>Vendidas</dt><dd><span class="stat-num mono" data-count="sold">0</span><small>und.</small></dd>
-            <span class="stat-bar"><i data-bar="sold"></i></span></div>
-          <div class="stat"><dt>Reseñas</dt><dd><span class="stat-num mono" data-count="reviews">0</span></dd>
-            <span class="stat-bar"><i data-bar="reviews"></i></span></div>
-        </dl>
-      </div>
+    <div class="hero-side">
+      <div class="hero-slot" data-mascot-slot="hero"></div>
+      <aside class="social-card glass" aria-label="Redes sociales">
+        <span class="label">Síguenos · astroly ventas</span>
+        <ul id="social-list"></ul>
+      </aside>
     </div>
   </section>
 

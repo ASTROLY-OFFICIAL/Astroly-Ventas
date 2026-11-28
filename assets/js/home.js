@@ -1,43 +1,26 @@
-// Inicio: portada con producto destacado en 3D, novedades y catálogo con filtros.
-import {shell, $, $$, ICON, card, bindCards, reduce, store, COLLECTIONS, CONFIG, TONE_NAMES, esc, norm, flyToCart, artSVG} from './ui.js';
+// Inicio: portada compacta con la escena de Astro, novedades y catálogo con filtros (carga más al llegar al final).
+import {shell, $, $$, ICON, card, bindCards, reduce, store, COLLECTIONS, CONFIG, TONE_NAMES, norm, flyToCart, artSVG} from './ui.js';
 import {PRODUCTS} from './data.js';
 
 const mascot = shell();
 
 $('.search-icon').innerHTML = ICON.search;
 
-// ── Portada: producto destacado en 3D (lámpara que levita y se desarma en piezas)
-const F = CONFIG.featured, fp = PRODUCTS.find(p => p.id === F.id);
-const feat = $('[data-feature]');
-$('[data-feature-name]', feat).textContent = fp.name;
-$('[data-feature-link]', feat).href = `producto.html?id=${fp.id}`;
-$('[data-feature-price]', feat).innerHTML = store.priceTag(fp.price);
-$('[data-stars]', feat).innerHTML = [1, 2, 3, 4, 5].map(i => `<i style="--fill:${Math.round(Math.min(1, Math.max(0, F.rating - i + 1)) * 100)}%"></i>`).join('');
-// Cifras: cuentan desde cero cuando la portada está a la vista (datos de ejemplo en CONFIG.featured).
-function countUp() {
-  const goals = {rating: F.rating, sold: F.sold, reviews: F.reviews}, t0 = performance.now(), dur = reduce.matches ? 0 : 1600;
-  const fmt = (k, v) => k === 'rating' ? v.toLocaleString('es-CO', {minimumFractionDigits: 1, maximumFractionDigits: 1}) : Math.round(v).toLocaleString('es-CO');
-  feat.classList.add('is-counting');
-  const step = now => {
-    const k = dur ? Math.min(1, (now - t0) / dur) : 1, e = 1 - Math.pow(1 - k, 4);
-    $$('[data-count]', feat).forEach(el => { const key = el.dataset.count; el.textContent = fmt(key, goals[key] * e); });
-    if (k < 1) requestAnimationFrame(step);
-  };
-  requestAnimationFrame(step);
+// ── Portada: Astro busca entre cajas, encuentra el producto de la promoción y esta se despliega.
+const P = CONFIG.promo, pp = PRODUCTS.find(p => p.id === P.id), promo = $('[data-promo]');
+if (pp) {
+  $('[data-promo-label]').textContent = P.label;
+  $('[data-promo-name]').textContent = pp.name;
+  $('[data-promo-price]').innerHTML = store.priceTag(pp.price);
+  $('[data-promo-link]').href = `producto.html?id=${pp.id}`;
+  const offer = $('[data-promo-offer]'); offer.textContent = P.offer; offer.hidden = !P.offer;
+  $('[data-promo-add]').addEventListener('click', () => flyToCart($('[data-promo-name]'), artSVG(pp.art, pp.tones[0])).then(() => store.add(pp.id, pp.tones[0], 1)));
 }
-if (F.showStats) {
-  $('[data-bar="sold"]', feat).style.setProperty('--to', '86%'); $('[data-bar="reviews"]', feat).style.setProperty('--to', '64%');
-  new IntersectionObserver(([e], io) => { if (e.isIntersecting) { io.disconnect(); setTimeout(countUp, 350); } }, {threshold: .4}).observe($('.feature-stats', feat));
-} else $('.feature-stats', feat).remove();
-$('[data-feature-add]', feat).addEventListener('click', e => {
-  const b = e.currentTarget; b.disabled = true;
-  flyToCart($('.lamp-stage', feat), artSVG(fp.art, fp.tones[0])).then(() => { store.add(fp.id, fp.tones[0], 1); b.disabled = false; });
-});
-const fallback = () => { $('.lamp-stage', feat).insertAdjacentHTML('afterbegin', `<div class="lamp-fallback">${artSVG(fp.art, fp.tones[0])}</div>`); };
-import('./lamp3d.js')
-  .then(({mountLamp}) => mountLamp($('.lamp-stage', feat), {labels: F.parts, button: $('[data-explode]', feat),
-    onExplode: open => feat.classList.toggle('is-exploded', open)}) || fallback())
-  .catch(fallback);
+import('./escena.js').then(({mountScene}) => mountScene($('.hero-scene'), {
+  onFound: () => { if (pp) { promo.classList.remove('is-open'); void promo.offsetWidth; promo.classList.add('is-open'); } },
+  onReset: () => promo.classList.remove('is-open')
+})).catch(() => promo.classList.add('is-open'));
+if (!pp) promo.remove();
 
 // ── Novedades
 const track = $('.row-track');
@@ -76,7 +59,7 @@ input.addEventListener('input', () => { STATE.q = input.value; STATE.shown = 15;
 sort.addEventListener('change', () => { STATE.sort = sort.value; render(); });
 $('[data-reset]').addEventListener('click', () => { Object.assign(STATE, {col: 'todo', price: 'all', tone: 'all', q: ''}); input.value = ''; drawChips(); render(); });
 
-function render() {
+function render(fresh = true) {
   const priceTest = PRICES.find(p => p.key === STATE.price)?.test || (() => true);
   let list = PRODUCTS.filter(p => (STATE.col === 'todo' || p.col === STATE.col) && priceTest(p) && (STATE.tone === 'all' || p.tones.includes(STATE.tone))
     && (!STATE.q || norm(p.name + ' ' + p.short).includes(norm(STATE.q))));
@@ -89,9 +72,13 @@ function render() {
   results.textContent = `${total} ${total === 1 ? 'producto' : 'productos'}`;
   empty.hidden = total > 0;
   if (!total && STATE.q) mascot.react('noresults');
-  grid.classList.remove('is-fresh'); void grid.offsetWidth; grid.classList.add('is-fresh');
+  if (fresh) { grid.classList.remove('is-fresh'); void grid.offsetWidth; grid.classList.add('is-fresh'); }
+  moreIO.disconnect(); const m = $('[data-more]', grid); if (m) moreIO.observe(m);
 }
-grid.addEventListener('click', e => { if (e.target.closest('[data-more]')) { STATE.shown += 15; render(); } });
+grid.addEventListener('click', e => { if (e.target.closest('[data-more]')) more(); });
+// Carga continua, como en las tiendas grandes: al acercarse al final se agregan más productos sin recargar.
+function more() { const y = scrollY; STATE.shown += 15; render(false); scrollTo(0, y); }
+const moreIO = new IntersectionObserver(es => es.forEach(e => e.isIntersecting && more()), {rootMargin: '0px 0px 400px 0px'});
 bindCards(grid);
 drawChips(); render();
 if (params.has('cat') || params.has('q') || location.hash === '#catalogo') requestAnimationFrame(() => $('#catalogo').scrollIntoView());

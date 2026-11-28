@@ -13,8 +13,8 @@ del proyecto: lo que diga ahí manda.
 Parte de main actualizado y crea la rama colab/nombre-de-la-tarea. No trabajes en main ni en ramas ajenas, no
 descartes cambios que no reconoces y no hagas force push.
 
-Mantén la paleta (zafiro profundo, blanco perla, naranja brasa), las esquinas rectas, la barra lateral, la portada 3D y el gato salvo
-que la tarea pida cambiarlas. No inventes reseñas, cifras ni precios reales.
+Mantén el sistema de diseño de la v2 (gris y negro, vidrio, bordes redondeados), la barra lateral y la mascota
+Astro (estrellita de 8 bits) salvo que la tarea pida cambiarlos. No inventes reseñas, cifras ni precios reales.
 
 Valida en escritorio y 390×844, tema claro y oscuro, y reporta solo lo que revisaste. Al terminar, agrega tu entrada en
 el "Registro de sesiones" de CONTEXTO.md, sube tu rama y abre un PR hacia main con la plantilla. No lo integres tú:
